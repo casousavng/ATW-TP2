@@ -1,55 +1,50 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>Notícias</title>
-    <!-- Incluindo o Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+<?php
+require_once '../includes/db.php';
+include '../includes/header.php';
 
-<!-- Cabeçalho -->
-<header class="bg-primary text-white py-3">
-    <div class="container">
-        <h1 class="mb-0">Notícias da Comunidade</h1>
-        <nav class="mt-2">
-            <a href="index.php" class="text-white text-decoration-none me-3">Início</a>
-            <a href="noticias.php" class="text-white text-decoration-none me-3">Notícias</a>
-            <a href="documentos.php" class="text-white text-decoration-none me-3">Documentos</a>
-            <a href="login.php" class="text-white text-decoration-none">Entrar</a>
-        </nav>
-    </div>
-</header>
+// Verificar se há um parâmetro de pesquisa
+$searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
 
-<!-- Seção de conteúdo -->
-<div class="container mt-5">
-    <a href="index.php" class="btn btn-secondary mb-4">← Voltar</a>
+// Ajustar a consulta SQL para filtrar as notícias com base na pesquisa
+if ($searchQuery) {
+    $stmt = $pdo->prepare("
+        SELECT id, titulo, imagem, texto 
+        FROM noticias 
+        WHERE visivel = 1 
+        AND (titulo LIKE ? OR texto LIKE ?)
+        ORDER BY data_criacao DESC
+    ");
+    // A pesquisa com % no início e no fim para buscar em qualquer parte do título ou texto
+    $stmt->execute(['%' . $searchQuery . '%', '%' . $searchQuery . '%']);
+} else {
+    // Caso não haja pesquisa, exibe todas as notícias
+    $stmt = $pdo->query("SELECT id, titulo, imagem, texto FROM noticias WHERE visivel = 1 ORDER BY data_criacao DESC");
+}
 
-    <!-- Artigo 1 -->
-    <article class="mb-4">
-        <h2>🏃 Torneio Anual de Atletismo</h2>
-        <p>Realiza-se no próximo mês o torneio com inscrições abertas até ao fim desta semana.</p>
-        <img src="imagens/torneio.jpg" alt="Torneio" class="img-fluid">
-    </article>
+$noticias = $stmt->fetchAll();
+?>
 
-    <!-- Artigo 2 -->
-    <article>
-        <h2>🚴 Nova pista de ciclismo inaugurada</h2>
-        <p>A nova pista está pronta a ser usada pelos nossos atletas!</p>
-        <img src="imagens/pista.jpg" alt="Pista de ciclismo" class="img-fluid">
-    </article>
-</div>
+<main class="container mt-1">
+    <!-- Formulário de pesquisa -->
+    <form action="noticias.php" method="get" class="mb-4">
+        <input type="text" name="q" class="form-control" placeholder="Pesquisar notícias..." value="<?= htmlspecialchars($searchQuery) ?>">
+    </form>
 
-<!-- Rodapé -->
-<footer class="bg-dark text-white py-3 mt-5">
-    <div class="container text-center">
-        <p>&copy; <?= date('Y') ?> Comunidade Desportiva</p>
-    </div>
-</footer>
+    <?php if (empty($noticias)): ?>
+        <div class="alert alert-warning" role="alert">
+            Não há notícias disponíveis no momento.
+        </div>
+    <?php else: ?>
+        <?php foreach ($noticias as $noticia): ?>
+            <article class="mb-4">
+                <h2><?= htmlspecialchars($noticia['titulo']) ?></h2>
+                <p><?= nl2br(htmlspecialchars($noticia['texto'])) ?></p>
+                <?php if ($noticia['imagem']): ?>
+                    <img src="/public/uploads/noticias/<?= htmlspecialchars($noticia['imagem']) ?>" alt="<?= htmlspecialchars($noticia['titulo']) ?>" class="img-fluid">
+                <?php endif; ?>
+            </article>
+        <?php endforeach; ?>
+    <?php endif; ?>
+</main>
 
-<!-- Incluindo o JS do Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-</body>
-</html>
+<?php include('../includes/footer.php'); ?>ß

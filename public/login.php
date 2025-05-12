@@ -34,26 +34,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>Login</title>
-    <!-- Incluindo o Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+<?php include('../includes/header.php'); ?>
 
-<!-- Cabeçalho -->
-<header class="bg-primary text-white py-3">
-    <div class="container">
-        <h1 class="mb-0">Iniciar Sessão</h1>
-    </div>
-</header>
-
-<!-- Formulário de login -->
-<div class="container mt-5">
-    <a href="index.php" class="btn btn-secondary mb-4">← Voltar</a>
+<main class="container mt-1">
 
     <?php foreach ($errors as $error): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
@@ -74,18 +57,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 
     <p class="mt-3">Ainda não tens conta? <a href="register.php">Regista-te aqui</a></p>
-</div>
+</main>
 
-<!-- Rodapé -->
-<footer class="bg-dark text-white py-3 mt-5">
-    <div class="container text-center">
-        <p>&copy; <?= date('Y') ?> Comunidade Desportiva</p>
-    </div>
-</footer>
-
-<!-- Incluindo o JS do Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-</body>
-</html>
+<?php include('../includes/footer.php'); ?>

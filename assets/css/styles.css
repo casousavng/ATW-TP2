@@ -1,0 +1,36 @@
+/* Para garantir que a página tenha altura mínima para ocupar toda a tela */
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+/* Flexbox no corpo para garantir que o conteúdo empurre o footer para o fundo */
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Garantir que o conteúdo ocupe o espaço restante */
+.container {
+    flex: 1;
+}
+
+/* Estilos para o cabeçalho */
+header {
+    margin-bottom: 0;
+}
+
+/* Reduzir o espaçamento entre a navbar e o conteúdo */
+header + .container {
+    margin-top: 0; /* Retira o espaçamento do topo */
+}
+
+/* Rodapé fixo no fundo da página */
+footer {
+    background-color: #343a40;
+    color: white;
+    padding: 1rem;
+    margin-top: auto; /* Faz o footer "empurrar" para o fundo */
+    width: 100%;
+    text-align: center;
+}

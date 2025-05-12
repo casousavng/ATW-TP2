@@ -1,5 +1,5 @@
 <?php
-define('BASE_PATH', dirname(__DIR__, 2));
+define('BASE_PATH', dirname(__DIR__, 3));
 require_once(BASE_PATH . '/includes/db.php');
 require_once(BASE_PATH . '/includes/auth.php');
 checkAdmin();

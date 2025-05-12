@@ -1,56 +1,49 @@
 <?php
-$files = glob("../uploads/documentos/*.*");
+require_once("../includes/db.php"); // Liga à base de dados
+
+// Verificar se há um parâmetro de pesquisa
+$searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
+
+// Ajustar a consulta SQL para filtrar os documentos com base na pesquisa
+if ($searchQuery) {
+    $stmt = $pdo->prepare("
+        SELECT nome_personalizado, nome_ficheiro 
+        FROM documentos 
+        WHERE nome_personalizado LIKE ? OR nome_ficheiro LIKE ? 
+        ORDER BY data_upload DESC
+    ");
+    $stmt->execute(['%' . $searchQuery . '%', '%' . $searchQuery . '%']);
+} else {
+    // Caso não haja pesquisa, exibe todos os documentos
+    $stmt = $pdo->query("SELECT nome_personalizado, nome_ficheiro FROM documentos ORDER BY data_upload DESC");
+}
+
+$documentos = $stmt->fetchAll();
 ?>
 
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>Documentos</title>
-    <!-- Incluindo o Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
+<?php include("../includes/header.php"); ?>
 
-<!-- Cabeçalho -->
-<header class="bg-primary text-white py-3">
-    <div class="container">
-        <h1 class="mb-0">Documentos Públicos</h1>
-        <nav class="mt-2">
-            <a href="index.php" class="text-white text-decoration-none me-3">Início</a>
-            <a href="noticias.php" class="text-white text-decoration-none me-3">Notícias</a>
-            <a href="documentos.php" class="text-white text-decoration-none me-3">Documentos</a>
-            <a href="login.php" class="text-white text-decoration-none">Entrar</a>
-        </nav>
-    </div>
-</header>
-
-<!-- Seção de documentos -->
-<div class="container mt-5">
-    <a href="index.php" class="btn btn-secondary mb-4">← Voltar</a>
+<main class="container mt-1">
+    <!-- Formulário de pesquisa -->
+    <form action="documentos.php" method="get" class="mb-4">
+        <input type="text" name="q" class="form-control" placeholder="Pesquisar documentos..." value="<?= htmlspecialchars($searchQuery) ?>">
+    </form>
 
     <h2>Lista de Documentos</h2>
     <ul class="list-group">
-        <?php foreach ($files as $file): ?>
-            <li class="list-group-item">
-                <a href="<?= htmlspecialchars($file) ?>" download class="text-decoration-none">
-                    <?= basename($file) ?>
-                </a>
-            </li>
-        <?php endforeach; ?>
+        <?php if (count($documentos) > 0): ?>
+            <?php foreach ($documentos as $doc): ?>
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><?= htmlspecialchars($doc['nome_personalizado']) ?></span>
+                    <a href="/uploads/documentos/<?= urlencode($doc['nome_ficheiro']) ?>" download class="btn btn-outline-primary btn-sm">
+                        Descarregar
+                    </a>
+                </li>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <li class="list-group-item">Nenhum documento disponível.</li>
+        <?php endif; ?>
     </ul>
-</div>
+</main>
 
-<!-- Rodapé -->
-<footer class="bg-dark text-white py-3 mt-5">
-    <div class="container text-center">
-        <p>&copy; <?= date('Y') ?> Comunidade Desportiva</p>
-    </div>
-</footer>
-
-<!-- Incluindo o JS do Bootstrap -->
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
-
-</body>
-</html>
+<?php include("../includes/footer.php"); ?>

@@ -35,3 +35,53 @@ CREATE TABLE email_verification_tokens (
     expires_at TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
+
+-- tabela de artigos
+CREATE TABLE articles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    image VARCHAR(255),
+    content TEXT NOT NULL,
+    is_visible BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
+
+-- Tabela de documentos
+CREATE TABLE documentos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome_personalizado VARCHAR(255) NOT NULL,
+    nome_ficheiro VARCHAR(255) NOT NULL,
+    data_upload DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- tabela de imagens em destaque
+CREATE TABLE imagem_destaque (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    caminho VARCHAR(255) NOT NULL,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+-- Tabela de notícias
+CREATE TABLE noticias (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    imagem VARCHAR(255) NOT NULL,
+    texto TEXT NOT NULL,
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users ADD COLUMN status ENUM('ativo', 'inativo') DEFAULT 'ativo';
+
+CREATE TABLE atividades (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    descricao VARCHAR(255) NOT NULL,
+    data DATETIME DEFAULT CURRENT_TIMESTAMP,
+    tipo_atividade ENUM('criação', 'edição', 'artigo_adicionado', 'login', 'logout', 'outro') NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+ALTER TABLE noticias ADD COLUMN visivel BOOLEAN DEFAULT 1;

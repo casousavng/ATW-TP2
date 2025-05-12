@@ -1,5 +1,5 @@
 <?php
-define('BASE_PATH', dirname(__DIR__, 2));
+define('BASE_PATH', dirname(__DIR__, 3));
 require_once(BASE_PATH . '/includes/db.php');
 require_once(BASE_PATH . '/includes/auth.php');
 
@@ -58,6 +58,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
             $stmt->execute([$hash, $userId]);
+
+            // Registra a atividade de alteração de senha
+            $stmt = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
+            $stmt->execute([$userId, 'Senha alterada', 'edição']);
         }
 
         // Atualizar ou inserir os valores dos campos extras
@@ -79,6 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $insert->execute([$userId, $field_id, $value]);
             }
         }
+
+        // Registra a atividade de edição do perfil
+        $stmt = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
+        $stmt->execute([$userId, 'Perfil editado', 'edição']);
 
         $_SESSION['user_name'] = $name;
         $success = true;
@@ -103,14 +111,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
 
-<header class="bg-primary text-white py-3">
-    <div class="container">
-        <h1 class="mb-0">Editar Perfil</h1>
-    </div>
-</header>
 
 <div class="container mt-5">
-    <a href="index.php" class="btn btn-secondary mb-4">← Voltar</a>
+    <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
 
     <?php if ($success): ?>
         <div class="alert alert-success">Perfil atualizado com sucesso!</div>
@@ -154,6 +157,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <hr>
 
+        <!-- Campos Extras -->
+        <h4>Campos Extras</h4>
+        <?php foreach ($fields as $field): ?>
+            <div class="mb-3">
+                <label class="form-label"><?= htmlspecialchars($field['name']) ?>:</label>
+                <input type="text" class="form-control" name="extra[<?= $field['id'] ?>]" value="<?= htmlspecialchars($extra_values[$field['id']] ?? '') ?>">
+            </div>
+        <?php endforeach; ?>
+
+        <hr>
+
         <!-- Seção para alteração de senha -->
         <h3>Alterar Password (opcional)</h3>
         <div class="mb-3">
@@ -168,24 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <hr>
 
-        <!-- Campos Extras -->
-        <h4>Campos Extras</h4>
-        <?php foreach ($fields as $field): ?>
-            <div class="mb-3">
-                <label class="form-label"><?= htmlspecialchars($field['name']) ?>:</label>
-                <input type="text" class="form-control" name="extra[<?= $field['id'] ?>]" value="<?= htmlspecialchars($extra_values[$field['id']] ?? '') ?>">
-            </div>
-        <?php endforeach; ?>
-
         <button type="submit" class="btn btn-primary">Guardar Alterações</button>
+        <a href="../index.php" class="btn btn-secondary">Cancelar</a>
     </form>
 </div>
-
-<footer class="bg-dark text-white py-3 mt-5">
-    <div class="container text-center">
-        <p>&copy; <?= date('Y') ?> Comunidade Desportiva</p>
-    </div>
-</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
