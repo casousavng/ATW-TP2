@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once '../includes/db.php';
+require_once '../includes/mailer.php'; // para enviar o código e email de verificação
 
 $errors = [];
 
@@ -16,20 +17,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
-            // Verifica se a conta está verificada
             if (!$user['is_verified']) {
-                $errors[] = "A tua conta ainda não foi verificada. Verifica o teu email.";
-            } else {
-                // Tudo OK, guardar sessão
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['is_admin'] = $user['is_admin'];
+                // Gera novo token de verificação
+                $newToken = bin2hex(random_bytes(16));
 
-                if ($user['is_admin']) {
-                    header("Location: admin/index.php");
+                // Atualiza o token na base de dados
+                $stmt = $pdo->prepare("UPDATE users SET verification_token = ? WHERE id = ?");
+                $stmt->execute([$newToken, $user['id']]);
+
+                // Envia o email de verificação
+                if (sendVerificationEmail($user['email'], $user['name'], $newToken)) {
+                    $errors[] = "A tua conta ainda não foi verificada. Enviámos um novo email de verificação.";
                 } else {
-                    header("Location: user/index.php");
+                    $errors[] = "Erro ao reenviar o email de verificação. Tenta mais tarde.";
                 }
+            } else {
+                // Gera token de 6 dígitos
+                $code = random_int(100000, 999999);
+                $expires = date('Y-m-d H:i:s', time() + 300); // expira em 5 minutos
+
+                // Guarda token no user
+                $stmt = $pdo->prepare("UPDATE users SET login_token = ?, login_token_expires = ? WHERE id = ?");
+                $stmt->execute([$code, $expires, $user['id']]);
+
+                // Envia o código por email
+                sendVerificationCode($user['email'], $user['name'], $code);
+
+                // Guarda dados temporariamente na sessão
+                $_SESSION['temp_user_id'] = $user['id'];
+                $_SESSION['2fa_user'] = [
+                    'id' => $user['id'],
+                    'name' => $user['name'],
+                    'is_admin' => $user['is_admin']
+                ];
+                $_SESSION['2fa_code'] = $code;
+
+                // Redireciona para o 2FA
+                header("Location: 2fa.php");
                 exit;
             }
         } else {
@@ -42,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php include('../includes/header.php'); ?>
 
 <main class="container mt-1">
+    <h2>Iniciar Sessão</h2>
 
     <?php foreach ($errors as $error): ?>
         <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>

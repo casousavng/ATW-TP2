@@ -187,6 +187,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
+<hr class="my-5">
+
+<!-- Secção para apagar a conta -->
+<div class="mt-5 p-4 bg-danger bg-opacity-10 border border-danger rounded">
+    <h4 class="text-danger">⚠️ Apagar Conta Permanentemente</h4>
+    <p>
+        Esta ação irá <strong>apagar definitivamente a sua conta</strong>, incluindo todos os seus dados e artigos publicados. 
+        Esta ação <strong>não pode ser desfeita</strong>.
+    </p>
+    <p>
+        Para confirmar, por favor escreva o seguinte no campo abaixo:
+        <br>
+        <code class="text-danger fw-bold">apagar <?= htmlspecialchars($user['name']) ?></code>
+    </p>
+
+    <form action="apagar_conta.php" method="post" onsubmit="return confirm('Tem a certeza que deseja apagar a conta? Esta ação é irreversível.');">
+        <div class="mb-3">
+            <label for="confirmar_apagar" class="form-label">Digite para confirmar:</label>
+            <input type="text" class="form-control border-danger" id="confirmar_apagar" name="confirmar_apagar" placeholder="apagar <?= htmlspecialchars($user['name']) ?>" required>
+        </div>
+        <input type="hidden" name="user_id" value="<?= $userId ?>">
+        <button type="submit" class="btn btn-outline-danger">🗑️ Apagar Conta</button>
+    </form>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
 

@@ -94,3 +94,7 @@ ADD COLUMN verification_token VARCHAR(255) DEFAULT NULL;
 UPDATE users 
 SET is_verified = 1, verification_token = NULL 
 WHERE email = 'admin@admin.com';
+
+ALTER TABLE users 
+ADD COLUMN login_token VARCHAR(6) DEFAULT NULL,
+ADD COLUMN login_token_expires DATETIME DEFAULT NULL;
