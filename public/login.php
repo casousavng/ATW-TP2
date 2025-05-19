@@ -16,17 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($user && password_verify($password, $user['password'])) {
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['user_name'] = $user['name'];
-            $_SESSION['is_admin'] = $user['is_admin'];
-
-            // Redireciona para a área certa
-            if ($user['is_admin']) {
-                header("Location: admin/index.php");
+            // Verifica se a conta está verificada
+            if (!$user['is_verified']) {
+                $errors[] = "A tua conta ainda não foi verificada. Verifica o teu email.";
             } else {
-                header("Location: user/index.php");
+                // Tudo OK, guardar sessão
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                $_SESSION['is_admin'] = $user['is_admin'];
+
+                if ($user['is_admin']) {
+                    header("Location: admin/index.php");
+                } else {
+                    header("Location: user/index.php");
+                }
+                exit;
             }
-            exit;
         } else {
             $errors[] = "Credenciais inválidas.";
         }

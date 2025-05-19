@@ -49,7 +49,7 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6 mb-4">
                     <div class="card h-100">
                         <?php if ($artigo['image']): ?>
-                            <img src="<?= htmlspecialchars($artigo['image']) ?>" class="card-img-top" alt="Imagem do artigo">
+                            <img src="../public/<?= htmlspecialchars($artigo['image']) ?>" class="card-img-top" alt="Imagem do artigo">
                         <?php endif; ?>
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($artigo['title']) ?></h5>

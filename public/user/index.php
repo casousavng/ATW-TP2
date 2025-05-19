@@ -109,6 +109,7 @@ foreach ($extra_values_raw as $ev) {
 
         <h2 class="mb-4">Os teus dados:</h2>
         <ul class="list-group">
+            <li class="list-group-item"><strong>Data de criação da conta:</strong> <?= htmlspecialchars($user['created_at']) ?></li>
             <li class="list-group-item"><strong>Nome:</strong> <?= htmlspecialchars($user['name']) ?></li>
             <li class="list-group-item"><strong>Data de nascimento:</strong> <?= htmlspecialchars($user['birth_date']) ?></li>
             <li class="list-group-item"><strong>Nacionalidade:</strong> <?= htmlspecialchars($user['nationality']) ?></li>
@@ -119,6 +120,7 @@ foreach ($extra_values_raw as $ev) {
                 <li class="list-group-item"><strong><?= htmlspecialchars($field['name']) ?>:</strong> <?= htmlspecialchars($extra_values[$field['id']] ?? 'Não definido') ?></li>
             <?php endforeach; ?>
         </ul>
+        <br>
 
     </main>
 

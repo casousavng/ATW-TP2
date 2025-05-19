@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Lidar com imagem
     if (!empty($_FILES['image']['name'])) {
-        $uploadDir = BASE_PATH . '/uploads/artigos/';
+        $uploadDir = '../../uploads/artigos/';
         $ext = strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION));
         $allowedExts = ['jpg', 'jpeg', 'png', 'gif'];
 

@@ -5,20 +5,17 @@ include '../includes/header.php';
 // Verificar se há um parâmetro de pesquisa
 $searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
 
-// Ajustar a consulta SQL para filtrar as notícias com base na pesquisa
 if ($searchQuery) {
     $stmt = $pdo->prepare("
-        SELECT id, titulo, imagem, texto 
+        SELECT id, titulo, imagem, texto, data_criacao
         FROM noticias 
         WHERE visivel = 1 
         AND (titulo LIKE ? OR texto LIKE ?)
         ORDER BY data_criacao DESC
     ");
-    // A pesquisa com % no início e no fim para buscar em qualquer parte do título ou texto
     $stmt->execute(['%' . $searchQuery . '%', '%' . $searchQuery . '%']);
 } else {
-    // Caso não haja pesquisa, exibe todas as notícias
-    $stmt = $pdo->query("SELECT id, titulo, imagem, texto FROM noticias WHERE visivel = 1 ORDER BY data_criacao DESC");
+    $stmt = $pdo->query("SELECT id, titulo, imagem, texto, data_criacao FROM noticias WHERE visivel = 1 ORDER BY data_criacao DESC");
 }
 
 $noticias = $stmt->fetchAll();
@@ -42,9 +39,10 @@ $noticias = $stmt->fetchAll();
                 <?php if ($noticia['imagem']): ?>
                     <img src="/public/uploads/noticias/<?= htmlspecialchars($noticia['imagem']) ?>" alt="<?= htmlspecialchars($noticia['titulo']) ?>" class="img-fluid">
                 <?php endif; ?>
+                <p><small>Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
             </article>
         <?php endforeach; ?>
     <?php endif; ?>
 </main>
 
-<?php include('../includes/footer.php'); ?>ß
+<?php include('../includes/footer.php'); ?>

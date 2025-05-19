@@ -20,8 +20,14 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Página de artigos do utilizador">
+    <meta name="keywords" content="artigos, utilizador, comunidade desportiva">
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães, Carlos Marques">
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
     <title>Meus Artigos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style_header.css">
 </head>
 <body>
 <div class="container mt-5">
@@ -38,7 +44,7 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <div class="col-md-6 mb-4">
                     <div class="card h-100">
                         <?php if ($a['image']): ?>
-                            <img src="<?= htmlspecialchars($a['image']) ?>" class="card-img-top" style="max-height: 200px; object-fit: cover;">
+                            <img src="../../<?= htmlspecialchars($a['image']) ?>" class="card-img-top" style="max-height: 200px; object-fit: cover;">
                         <?php endif; ?>
                         <div class="card-body">
                             <h5 class="card-title"><?= htmlspecialchars($a['title']) ?></h5>

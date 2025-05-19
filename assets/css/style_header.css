@@ -1,0 +1,15 @@
+.navbar-custom {
+    background-color: #343a40; /* cinza escuro */
+}
+.navbar-custom .nav-link, .navbar-custom .navbar-brand {
+    color: #f8f9fa;
+}
+.navbar-custom .nav-link:hover {
+    color: #ced4da;
+}
+.search-box {
+    display: none;
+}
+body {
+    overflow-x: hidden;
+}

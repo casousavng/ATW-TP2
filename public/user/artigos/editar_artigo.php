@@ -57,7 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update'])) {
             $destination = $uploadDir . $filename;
 
             if (move_uploaded_file($_FILES['image']['tmp_name'], $destination)) {
-                $imagePath = 'uploads/artigos/' . $filename;
+                $imagePath = '/uploads/artigos/' . $filename;
             } else {
                 $errors[] = "Erro ao enviar nova imagem.";
             }
@@ -130,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
             <label for="image">Imagem Atual</label>
             <?php if ($imagePath): ?>
                 <div class="mt-2">
-                    <img src="<?= '/' . ltrim($imagePath, '/') ?>" alt="Imagem atual" class="img-thumbnail" style="max-height: 200px;">
+                    <img src="../../<?= htmlspecialchars($imagePath) ?>" alt="Imagem atual" class="img-thumbnail" style="max-height: 200px;">
                 </div>
             <?php endif; ?><br>
             <label for="image" class="form-label">Nova Imagem (opcional)</label>

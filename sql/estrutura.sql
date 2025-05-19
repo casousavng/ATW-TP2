@@ -85,3 +85,12 @@ CREATE TABLE atividades (
 );
 
 ALTER TABLE noticias ADD COLUMN visivel BOOLEAN DEFAULT 1;
+
+ALTER TABLE users 
+ADD COLUMN is_verified TINYINT(1) DEFAULT 0,
+ADD COLUMN verification_token VARCHAR(255) DEFAULT NULL;
+
+
+UPDATE users 
+SET is_verified = 1, verification_token = NULL 
+WHERE email = 'admin@admin.com';

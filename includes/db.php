@@ -13,9 +13,6 @@ $conn .= ";sslmode=verify-ca;sslrootcert=ca.pem";
 try {
   $pdo = new PDO($conn, $fields["user"], $fields["pass"]);
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-  // Linha de debug removida ou comentada:
-  // $stmt = $pdo->query("SELECT VERSION()");
-  // echo $stmt->fetch()[0];
 } catch (Exception $e) {
   echo "Erro: " . $e->getMessage();
   exit;

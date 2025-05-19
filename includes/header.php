@@ -3,42 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Comunidade Desportiva</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Comunidade Desportiva - Artigos, Notícias e partilha de Documentos">
+    <meta name="keywords" content="Comunidade Desportiva, Artigos, Notícias, Documentos">
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães, Carlos Marques">
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .navbar-custom {
-            background-color: #343a40; /* cinza escuro */
-        }
-        .navbar-custom .nav-link, .navbar-custom .navbar-brand {
-            color: #f8f9fa;
-        }
-        .navbar-custom .nav-link:hover {
-            color: #ced4da;
-        }
-        .search-box {
-            display: none;
-        }
-    </style>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            // Função para exibir o campo de pesquisa de acordo com a página atual
-            function toggleSearch() {
-                const path = window.location.pathname;
-
-                // Verifica se a URL contém "artigos", "noticias" ou "documentos" e exibe o campo de pesquisa correspondente
-                if (path.includes('artigos')) {
-                    document.getElementById('searchArtigos').style.display = 'block';
-                } else if (path.includes('noticias')) {
-                    document.getElementById('searchNoticias').style.display = 'block';
-                } else if (path.includes('documentos')) {
-                    document.getElementById('searchDocumentos').style.display = 'block';
-                }
-            }
-
-            // Chama a função para ajustar o campo de pesquisa conforme a página
-            toggleSearch();
-        });
-    </script>
+    <link rel="stylesheet" href="../assets/css/style_header.css">
 </head>
 <body>
 

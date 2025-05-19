@@ -60,7 +60,7 @@ $imagensDestaque = $stmt->fetchAll(PDO::FETCH_COLUMN);
         </style>
 
     <?php else: ?>
-        <img src="/imagens/comunidade.jpg" alt="Imagem da comunidade desportiva" class="img-fluid">
+        <p class="text-muted">Ainda não há imagens em destaque.</p>
     <?php endif; ?>
 </section>
 
