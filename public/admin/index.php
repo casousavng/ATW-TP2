@@ -10,13 +10,9 @@ checkAdmin(); // Garante que o utilizador é administrador
 <head>
     <meta charset="UTF-8">
     <title>Painel de Administração</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Responsivo -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
-        . {
-            overflow-x: hidden;
-        }
-
         html, body {
             height: 100%;
             margin: 0;
@@ -25,7 +21,6 @@ checkAdmin(); // Garante que o utilizador é administrador
         body {
             display: flex;
             flex-direction: column;
-            
         }
 
         main.container {
@@ -38,6 +33,21 @@ checkAdmin(); // Garante que o utilizador é administrador
             padding: 1rem;
             margin-top: auto;
             text-align: center;
+        }
+
+        /* Ajuste extra para ecrãs pequenos */
+        @media (max-width: 576px) {
+            .card {
+                margin-bottom: 1.5rem;
+            }
+
+            .card-body {
+                padding: 1rem;
+            }
+
+            h5.card-title {
+                font-size: 1.2rem;
+            }
         }
     </style>
 </head>
@@ -56,7 +66,7 @@ checkAdmin(); // Garante que o utilizador é administrador
         <h2 class="mb-4">Bem-vindo(a), <?= htmlspecialchars($_SESSION['user_name']) ?>!</h2>
         <div class="row">
             <!-- Utilizadores -->
-            <div class="col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Utilizadores</h5>
@@ -67,7 +77,7 @@ checkAdmin(); // Garante que o utilizador é administrador
             </div>
 
             <!-- Campos Extra -->
-            <div class="col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Campos Extra</h5>
@@ -78,7 +88,7 @@ checkAdmin(); // Garante que o utilizador é administrador
             </div>
 
             <!-- Artigos -->
-            <div class="col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Artigos</h5>
@@ -89,7 +99,7 @@ checkAdmin(); // Garante que o utilizador é administrador
             </div>
 
             <!-- Documentos -->
-            <div class="col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Documentos</h5>
@@ -99,8 +109,8 @@ checkAdmin(); // Garante que o utilizador é administrador
                 </div>
             </div>
 
-             <!-- Imagem Destaque -->
-            <div class="col-md-4 mb-4">
+            <!-- Imagem Destaque -->
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Imagem em Destaque</h5>
@@ -111,7 +121,7 @@ checkAdmin(); // Garante que o utilizador é administrador
             </div>
 
             <!-- Notícias -->
-            <div class="col-md-4 mb-4">
+            <div class="col-12 col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Notícias</h5>
@@ -122,7 +132,6 @@ checkAdmin(); // Garante que o utilizador é administrador
             </div>
         </div>
     </main>
-
 
     <!-- Scripts Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

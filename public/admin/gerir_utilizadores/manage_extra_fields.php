@@ -48,23 +48,53 @@ $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Gestão de Campos Extra">
     <title>Gestão de Campos Extra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<style>
-    .text_center {
-        align: center;
-    }
-    th{
-        text-align: center;
-    }
-</style>
+    <style>
+        .text_center {
+            text-align: center;
+        }
 
+        th, td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        @media (max-width: 576px) {
+            h2, h5 {
+                font-size: 1.25rem;
+            }
+
+            .btn {
+                font-size: 0.875rem;
+                padding: 0.4rem 0.6rem;
+            }
+
+            .form-control, .form-select {
+                font-size: 0.9rem;
+            }
+
+            .modal-body, .modal-footer, .modal-title {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body class="bg-light">
     <div class="container py-4">
-        <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
-        <h2>Gestão de Campos Extra</h2>
+        <a href="../index.php" class="btn btn-outline-secondary mb-4">
+            <i class="bi bi-arrow-left"></i> Voltar
+        </a>
+        <h2 class="mb-4">Gestão de Campos Extra</h2>
 
         <?php if ($success): ?>
             <div class="alert alert-success">Operação realizada com sucesso.</div>
@@ -89,61 +119,71 @@ $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <option value="url">URL</option>
                 </select>
             </div>
-            <button type="submit" name="add_field" class="btn btn-primary">Adicionar Campo</button>
+            <button type="submit" name="add_field" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Adicionar Campo
+            </button>
         </form>
 
         <!-- Lista de campos existentes -->
-        <h5>Campos Existentes</h5>
-        <table class="table table-bordered bg-white shadow-sm">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>Tipo</th>
-                    <th>Ações</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($fields as $field): ?>
+        <h5 class="mb-3">Campos Existentes</h5>
+        <div class="table-responsive">
+            <table class="table table-bordered bg-white shadow-sm">
+                <thead class="table-dark">
                     <tr>
-                        <td><?= $field['id'] ?></td>
-                        <td><?= htmlspecialchars($field['name']) ?></td>
-                        <td><?= htmlspecialchars($field['type']) ?></td>
-                        <td class="text-center">
-                            <button class="btn btn-danger btn-sm"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#confirmDeleteModal"
-                                    data-field-id="<?= $field['id'] ?>"
-                                    data-field-name="<?= htmlspecialchars($field['name']) ?>">
-                                Remover
-                            </button>
-                        </td>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Tipo</th>
+                        <th>Ações</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    <?php foreach ($fields as $field): ?>
+                        <tr>
+                            <td><?= $field['id'] ?></td>
+                            <td><?= htmlspecialchars($field['name']) ?></td>
+                            <td><?= htmlspecialchars($field['type']) ?></td>
+                            <td class="text-center">
+                                <button class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#confirmDeleteModal"
+                                        data-field-id="<?= $field['id'] ?>"
+                                        data-field-name="<?= htmlspecialchars($field['name']) ?>">
+                                    <i class="bi bi-trash"></i> Remover
+                                </button>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Modal de Confirmação -->
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered"">
+      <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Remoção</h5>
+            <h5 class="modal-title" id="confirmDeleteModalLabel">
+                <i class="bi bi-exclamation-triangle text-warning"></i> Confirmar Remoção
+            </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
           </div>
           <div class="modal-body">
             Tem a certeza que deseja remover o campo <strong id="modalFieldName">este campo</strong>?
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Remover</a>
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                <i class="bi bi-x-circle"></i> Cancelar
+            </button>
+            <a href="#" class="btn btn-danger" id="confirmDeleteBtn">
+                <i class="bi bi-trash"></i> Remover
+            </a>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Bootstrap JS + script personalizado -->
+    <!-- Bootstrap JS + Script Modal -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
     document.addEventListener('DOMContentLoaded', function () {
