@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 
 
-<div class="container mt-5">
+<div class="container mt-4">
     <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
 
     <?php if ($success): ?>
@@ -185,27 +185,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <button type="submit" class="btn btn-primary">Guardar Alterações</button>
         <a href="../index.php" class="btn btn-secondary">Cancelar</a>
     </form>
+    
 </div>
 
-<hr class="my-5">
+<hr class="my-4">
 
 <!-- Secção para apagar a conta -->
-<div class="mt-5 p-4 bg-danger bg-opacity-10 border border-danger rounded">
+<div class="mt-4 p-4 bg-danger bg-opacity-10 border border-danger rounded">
     <h4 class="text-danger">⚠️ Apagar Conta Permanentemente</h4>
     <p>
-        Esta ação irá <strong>apagar definitivamente a sua conta</strong>, incluindo todos os seus dados e artigos publicados. 
+        Esta ação irá <strong>apagar definitivamente a tua conta</strong>, incluindo todos os teus dados e artigos publicados. 
         Esta ação <strong>não pode ser desfeita</strong>.
     </p>
     <p>
-        Para confirmar, por favor escreva o seguinte no campo abaixo:
+        Para confirmar, por favor escreve o seguinte no campo abaixo:
         <br>
-        <code class="text-danger fw-bold">apagar <?= htmlspecialchars($user['name']) ?></code>
+        <code class="text-danger fw-bold">apagar_<?= htmlspecialchars($user['name']) ?></code>
     </p>
 
     <form action="apagar_conta.php" method="post" onsubmit="return confirm('Tem a certeza que deseja apagar a conta? Esta ação é irreversível.');">
         <div class="mb-3">
-            <label for="confirmar_apagar" class="form-label">Digite para confirmar:</label>
-            <input type="text" class="form-control border-danger" id="confirmar_apagar" name="confirmar_apagar" placeholder="apagar <?= htmlspecialchars($user['name']) ?>" required>
+            <label for="confirmar_apagar" class="form-label">Digita para confirmar:</label>
+            <input type="text" class="form-control border-danger" id="confirmar_apagar" name="confirmar_apagar" placeholder="apagar_<?= htmlspecialchars($user['name']) ?>" required>
         </div>
         <input type="hidden" name="user_id" value="<?= $userId ?>">
         <button type="submit" class="btn btn-outline-danger">🗑️ Apagar Conta</button>

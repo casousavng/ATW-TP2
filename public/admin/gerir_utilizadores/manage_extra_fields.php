@@ -50,9 +50,19 @@ $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Gestão de Campos Extra</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .text_center {
+        align: center;
+    }
+    th{
+        text-align: center;
+    }
+</style>
+
 </head>
 <body class="bg-light">
-    <div class="container py-5">
+    <div class="container py-4">
         <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
         <h2>Gestão de Campos Extra</h2>
 
@@ -99,13 +109,57 @@ $fields = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= $field['id'] ?></td>
                         <td><?= htmlspecialchars($field['name']) ?></td>
                         <td><?= htmlspecialchars($field['type']) ?></td>
-                        <td>
-                            <a href="?delete=<?= $field['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Tens a certeza que queres remover este campo?')">Remover</a>
+                        <td class="text-center">
+                            <button class="btn btn-danger btn-sm"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#confirmDeleteModal"
+                                    data-field-id="<?= $field['id'] ?>"
+                                    data-field-name="<?= htmlspecialchars($field['name']) ?>">
+                                Remover
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
     </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered"">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Remoção</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            Tem a certeza que deseja remover o campo <strong id="modalFieldName">este campo</strong>?
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <a href="#" class="btn btn-danger" id="confirmDeleteBtn">Remover</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS + script personalizado -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const modal = document.getElementById('confirmDeleteModal');
+        modal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            const fieldId = button.getAttribute('data-field-id');
+            const fieldName = button.getAttribute('data-field-name');
+
+            const modalFieldName = modal.querySelector('#modalFieldName');
+            const confirmDeleteBtn = modal.querySelector('#confirmDeleteBtn');
+
+            modalFieldName.textContent = fieldName;
+            confirmDeleteBtn.href = `?delete=${fieldId}`;
+        });
+    });
+    </script>
 </body>
 </html>

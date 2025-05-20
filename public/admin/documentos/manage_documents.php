@@ -39,14 +39,15 @@ $docs = $pdo->query("SELECT * FROM documentos ORDER BY data_upload DESC")->fetch
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Imagem em Destaque</title>
+    <title>Gerir Documentos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<div class="container py-5">
-    <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+<div class="container py-4">
+    
 
     <main class="container mt-1">
+        <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
 
         <?php if (!empty($uploadSuccess)): ?>
             <div class="alert alert-success">Documento carregado com sucesso!</div>

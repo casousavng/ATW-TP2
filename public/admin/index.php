@@ -12,6 +12,11 @@ checkAdmin(); // Garante que o utilizador é administrador
     <title>Painel de Administração</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+
+        . {
+            overflow-x: hidden;
+        }
+
         html, body {
             height: 100%;
             margin: 0;
@@ -20,6 +25,7 @@ checkAdmin(); // Garante que o utilizador é administrador
         body {
             display: flex;
             flex-direction: column;
+            
         }
 
         main.container {
@@ -54,7 +60,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Utilizadores</h5>
-                        <p class="card-text">Faça a gestão dos membros da sua comunidade. Edite os dados ou faça alteração de status.</p>
+                        <p class="card-text">Faz a gestão dos membros da tua comunidade. Edita os dados ou faz alteração de status.</p>
                         <a href="gerir_utilizadores/users.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
@@ -65,7 +71,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Campos Extra</h5>
-                        <p class="card-text">Configure campos personalizados para os perfis dos seus utilizadores.</p>
+                        <p class="card-text">Configura campos personalizados para os perfis dos teus utilizadores.</p>
                         <a href="gerir_utilizadores/manage_extra_fields.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
@@ -76,7 +82,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Artigos</h5>
-                        <p class="card-text">Faça a gestão dos artigos publicados pela sua comunidade.</p>
+                        <p class="card-text">Faz a gestão dos artigos publicados pela tua comunidade.</p>
                         <a href="gerir_artigos/artigos.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
@@ -87,7 +93,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Documentos</h5>
-                        <p class="card-text">Faça upload, edite ou remova documentos partilhados com a comunidade.</p>
+                        <p class="card-text">Faz upload, edita ou remove documentos partilhados com a comunidade.</p>
                         <a href="documentos/manage_documents.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
@@ -98,7 +104,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Imagem em Destaque</h5>
-                        <p class="card-text">Faça upload, edite ou remova a imagem em destaque.</p>
+                        <p class="card-text">Faz upload, edita ou remove a imagem em destaque.</p>
                         <a href="destaques/editar_imagem_destaque.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>
@@ -109,7 +115,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Notícias</h5>
-                        <p class="card-text">Crie, edite ou remova notícias partilhadas com a comunidade.</p>
+                        <p class="card-text">Cria, edita ou remove notícias partilhadas com a comunidade.</p>
                         <a href="noticias/add_noticia.php" class="btn btn-primary">Gerir</a>
                     </div>
                 </div>

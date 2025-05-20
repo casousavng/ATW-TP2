@@ -38,7 +38,7 @@ function sendEmail($toEmail, $toName, $subject, $htmlBody, $fromName = 'Sistema'
 }
 
 function sendVerificationEmail($email, $name, $token) {
-    $verificationLink = "http://localhost:3000/includes/verify.php?token=" . urlencode($token);
+    $verificationLink = "http://localhost:3000/includes/account_verify.php?token=" . urlencode($token);
 
     $body = "
         Se bem-vindo a nossa comunidade, <strong>$name</strong>.<br><br>

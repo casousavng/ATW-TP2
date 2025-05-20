@@ -10,7 +10,6 @@ if (!$id) {
     exit;
 }
 
-// Buscar informações do utilizador
 $stmt = $pdo->prepare("SELECT * FROM users WHERE id = ?");
 $stmt->execute([$id]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -20,15 +19,12 @@ if (!$user) {
     exit;
 }
 
-// Verificar se é o único administrador
 $adminCountStmt = $pdo->query("SELECT COUNT(*) FROM users WHERE is_admin = 1");
 $adminCount = $adminCountStmt->fetchColumn();
 $isOnlyAdmin = $user['is_admin'] && $adminCount == 1;
 
-// Buscar campos extra
 $fields = $pdo->query("SELECT * FROM extra_fields")->fetchAll(PDO::FETCH_ASSOC);
 
-// Buscar valores dos campos extra
 $values_stmt = $pdo->prepare("SELECT * FROM user_extra_values WHERE user_id = ?");
 $values_stmt->execute([$id]);
 $extra_values_raw = $values_stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -38,21 +34,18 @@ foreach ($extra_values_raw as $ev) {
     $extra_values[$ev['field_id']] = $ev['value'];
 }
 
-// Envio do formulário
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = $_POST['name'];
     $email = $_POST['email'];
     $is_admin = isset($_POST['is_admin']) ? 1 : 0;
 
     if ($isOnlyAdmin && !$is_admin) {
-    // Força a manter como administrador mesmo que desmarcado
-    $is_admin = 1;
+        $is_admin = 1;
     }
 
     $stmt = $pdo->prepare("UPDATE users SET name = ?, email = ?, is_admin = ? WHERE id = ?");
     $stmt->execute([$name, $email, $is_admin, $id]);
 
-    // Atualizar campos extra
     foreach ($fields as $field) {
         $field_id = $field['id'];
         $value = $_POST['extra'][$field_id] ?? '';
@@ -69,7 +62,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    // Adicionar novo campo
     if (!empty($_POST['new_field_name'])) {
         $new_field_name = $_POST['new_field_name'];
         $new_field_type = $_POST['new_field_type'];
@@ -82,35 +74,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit;
 }
 
-// Alternar status
-if (isset($_GET['action']) && $_GET['action'] === 'inactive') {
-    if ($isOnlyAdmin) {
-        echo "Não é possível inativar o único administrador.";
+if (isset($_GET['confirm_action'])) {
+    if ($_GET['confirm_action'] === 'inactive' && !$isOnlyAdmin) {
+        $new_status = $user['status'] === 'ativo' ? 'inativo' : 'ativo';
+        $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
+        $stmt->execute([$new_status, $id]);
+        header("Location: edit_user.php?id=$id");
         exit;
     }
 
-    $new_status = $user['status'] === 'ativo' ? 'inativo' : 'ativo';
-    $stmt = $pdo->prepare("UPDATE users SET status = ? WHERE id = ?");
-    $stmt->execute([$new_status, $id]);
-    header("Location: edit_user.php?id=" . $id);
-    exit;
-}
+    if ($_GET['confirm_action'] === 'delete' && !$isOnlyAdmin) {
+        $stmt = $pdo->prepare("DELETE FROM user_extra_values WHERE user_id = ?");
+        $stmt->execute([$id]);
 
-// Apagar utilizador
-if (isset($_GET['action']) && $_GET['action'] === 'delete') {
-    if ($isOnlyAdmin) {
-        echo "Não é possível apagar o único administrador.";
+        $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->execute([$id]);
+
+        header("Location: users.php");
         exit;
     }
-
-    $stmt = $pdo->prepare("DELETE FROM user_extra_values WHERE user_id = ?");
-    $stmt->execute([$id]);
-
-    $stmt = $pdo->prepare("DELETE FROM users WHERE id = ?");
-    $stmt->execute([$id]);
-
-    header("Location: users.php");
-    exit;
 }
 ?>
 
@@ -120,6 +102,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     <meta charset="UTF-8">
     <title>Editar Utilizador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <style>
         .status-indicator {
             font-weight: bold;
@@ -149,7 +132,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     </style>
 </head>
 <body class="bg-light">
-<div class="container py-5">
+<div class="container py-4">
     <a href="users.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
 
     <div class="header-with-status mb-4">
@@ -175,7 +158,7 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
             <input class="form-check-input" type="checkbox" name="is_admin" id="is_admin" <?= $user['is_admin'] ? 'checked' : '' ?> <?= $isOnlyAdmin ? 'disabled' : '' ?>>
             <label class="form-check-label" for="is_admin">Administrador</label>
             <?php if ($isOnlyAdmin): ?>
-                <div class="text-danger mt-1">Este é o único administrador. Não pode remover este privilégio.</div>
+                <div class="text-danger mt-1">Este é o único administrador. Não podes remover este privilégio.</div>
             <?php endif; ?>
         </div>
 
@@ -184,9 +167,9 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
             <div class="mb-3">
                 <label class="form-label"><?= htmlspecialchars($field['name']) ?>:</label>
                 <input type="<?= htmlspecialchars($field['type'] ?? 'text') ?>" 
-                    class="form-control" 
-                    value="<?= htmlspecialchars($extra_values[$field['id']] ?? '') ?>" 
-                    disabled>
+                       class="form-control" 
+                       value="<?= htmlspecialchars($extra_values[$field['id']] ?? '') ?>" 
+                       disabled>
             </div>
         <?php endforeach; ?>
 
@@ -211,16 +194,58 @@ if (isset($_GET['action']) && $_GET['action'] === 'delete') {
     <div class="mt-4">
         <?php if (!$isOnlyAdmin): ?>
             <?php if ($user['status'] === 'ativo'): ?>
-                <a href="?action=inactive&id=<?= $user['id'] ?>" class="btn btn-warning" onclick="return confirm('Tem a certeza que deseja inativar este utilizador?')">Inativar Utilizador</a>
+                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">Inativar Utilizador</button>
             <?php else: ?>
-                <a href="?action=inactive&id=<?= $user['id'] ?>" class="btn btn-success" onclick="return confirm('Tem a certeza que deseja ativar este utilizador?')">Ativar Utilizador</a>
+                <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">Ativar Utilizador</button>
             <?php endif; ?>
 
-            <a href="?action=delete&id=<?= $user['id'] ?>" class="btn btn-danger" onclick="return confirm('Tem a certeza que deseja apagar este utilizador?')">Apagar Utilizador</a>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="delete">Apagar Utilizador</button>
         <?php else: ?>
             <div class="alert alert-danger mt-3">Não é possível inativar ou apagar o único administrador.</div>
         <?php endif; ?>
     </div>
 </div>
+
+<!-- Modal de Confirmação -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirmar Ação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body" id="modal-body-text">
+        Tens a certeza que desejas continuar?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <a href="#" id="confirmActionBtn" class="btn btn-danger">Confirmar</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmBtn = document.getElementById('confirmActionBtn');
+    const modalText = document.getElementById('modal-body-text');
+
+    confirmModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const action = button.getAttribute('data-action');
+
+        let text = '';
+        if (action === 'delete') {
+            text = 'Tens a certeza que desejas apagar este utilizador? Esta ação não pode ser desfeita.';
+        } else if (action === 'inactive') {
+            text = 'Tens a certeza que desejas alterar o estado deste utilizador?';
+        }
+
+        modalText.textContent = text;
+        confirmBtn.href = `?id=<?= $user['id'] ?>&confirm_action=${action}`;
+    });
+});
+</script>
 </body>
 </html>

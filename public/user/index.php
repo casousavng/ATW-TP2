@@ -78,7 +78,7 @@ foreach ($extra_values_raw as $ev) {
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Dados Pessoais</h5>
-                        <p class="card-text">Consulte os seus dados pessoais e edite as informações quando necessário.</p>
+                        <p class="card-text">Consulta os teus dados pessoais e edita as informações quando necessário.</p>
                         <a href="perfil/edit.php" class="btn btn-primary">Editar Perfil</a>
                     </div>
                 </div>
@@ -89,7 +89,7 @@ foreach ($extra_values_raw as $ev) {
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Meus Artigos</h5>
-                        <p class="card-text">Crie e edite os artigos que partilha com a comunidade.</p>
+                        <p class="card-text">Cria e edita os artigos que partilhas com a comunidade.</p>
                         <a href="artigos/artigos.php" class="btn btn-info">Gerir Artigos</a>
                     </div>
                 </div>
@@ -100,7 +100,7 @@ foreach ($extra_values_raw as $ev) {
                 <div class="card h-100 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Histórico de Atividades</h5>
-                        <p class="card-text">Veja o histórico de atividades recentes realizadas na sua conta.</p>
+                        <p class="card-text">Vê o histórico de atividades recentes realizadas na tua conta.</p>
                         <a href="perfil/atividades.php" class="btn btn-info">Ver Histórico</a>
                     </div>
                 </div>
@@ -123,8 +123,6 @@ foreach ($extra_values_raw as $ev) {
         <br>
 
     </main>
-
-
 
     <!-- Scripts Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>

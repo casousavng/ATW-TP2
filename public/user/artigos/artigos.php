@@ -31,6 +31,7 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body>
 <div class="container mt-5">
+    
     <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
     <h1 class="mb-4">Meus Artigos</h1>
 

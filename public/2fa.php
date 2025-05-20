@@ -68,7 +68,7 @@ $expiresAtMs = isset($user['login_token_expires']) ? strtotime($user['login_toke
 
 <?php include('../includes/header.php'); ?>
 
-<main class="container mt-4">
+<main class="container mt-1">
     <h2>Confirmação Multiplo-fator</h2>
 
     <p>Um código de verificação foi enviado para o teu email. Por favor, verifica o teu email e insere o código abaixo.</br>

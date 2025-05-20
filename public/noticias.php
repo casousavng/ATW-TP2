@@ -1,6 +1,7 @@
 <?php
+// public/noticias.php (CONTROLLER)
+
 require_once '../includes/db.php';
-include '../includes/header.php';
 
 // Verificar se há um parâmetro de pesquisa
 $searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
@@ -8,8 +9,8 @@ $searchQuery = isset($_GET['q']) ? $_GET['q'] : '';
 if ($searchQuery) {
     $stmt = $pdo->prepare("
         SELECT id, titulo, imagem, texto, data_criacao
-        FROM noticias 
-        WHERE visivel = 1 
+        FROM noticias
+        WHERE visivel = 1
         AND (titulo LIKE ? OR texto LIKE ?)
         ORDER BY data_criacao DESC
     ");
@@ -19,30 +20,9 @@ if ($searchQuery) {
 }
 
 $noticias = $stmt->fetchAll();
-?>
 
-<main class="container mt-1">
-    <!-- Formulário de pesquisa -->
-    <form action="noticias.php" method="get" class="mb-4">
-        <input type="text" name="q" class="form-control" placeholder="Pesquisar notícias..." value="<?= htmlspecialchars($searchQuery) ?>">
-    </form>
-
-    <?php if (empty($noticias)): ?>
-        <div class="alert alert-warning" role="alert">
-            Não há notícias disponíveis no momento.
-        </div>
-    <?php else: ?>
-        <?php foreach ($noticias as $noticia): ?>
-            <article class="mb-4">
-                <h2><?= htmlspecialchars($noticia['titulo']) ?></h2>
-                <p><?= nl2br(htmlspecialchars($noticia['texto'])) ?></p>
-                <?php if ($noticia['imagem']): ?>
-                    <img src="/public/uploads/noticias/<?= htmlspecialchars($noticia['imagem']) ?>" alt="<?= htmlspecialchars($noticia['titulo']) ?>" class="img-fluid">
-                <?php endif; ?>
-                <p><small>Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
-            </article>
-        <?php endforeach; ?>
-    <?php endif; ?>
-</main>
-
-<?php include('../includes/footer.php'); ?>
+// No final do controller, inclua a view.
+// As variáveis $searchQuery e $noticias estarão disponíveis na view.
+include '../includes/header.php'; // Se tiver um header comum
+include '../views/public/noticias.php'; // A view específica da listagem de notícias
+include '../includes/footer.php'; // Se tiver um footer comum

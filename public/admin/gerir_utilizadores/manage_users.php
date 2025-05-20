@@ -15,6 +15,13 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Gerenciar Usuários</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+  body {
+    overflow-x: hidden;
+  }
+</style>
+
 </head>
 <body>
     <header class="bg-dark text-white py-3">

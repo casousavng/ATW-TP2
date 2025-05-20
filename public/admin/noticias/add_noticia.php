@@ -1,28 +1,51 @@
 <?php
-define('BASE_PATH', dirname(__DIR__, 3));  // Caminho base ajustado para corrigir os erros
-require_once BASE_PATH . '/includes/db.php';  // Caminho correto para db.php
-require_once BASE_PATH . '/includes/auth.php';  // Caminho correto para auth.php
-checkAdmin();  // Verifica se o usuário é administrador
+define('BASE_PATH', dirname(__DIR__, 3));
+require_once BASE_PATH . '/includes/db.php';
+require_once BASE_PATH . '/includes/auth.php';
+checkAdmin();
 
-// Variáveis para o sucesso ou erro no upload
 $sucesso = false;
 $erro = '';
 
-// Processar o envio do formulário
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Exclusão da notícia via POST
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
+    $delete_id = (int)$_POST['delete_id'];
+
+    // Buscar notícia para deletar imagem
+    $stmt = $pdo->prepare("SELECT imagem FROM noticias WHERE id = ?");
+    $stmt->execute([$delete_id]);
+    $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($noticia) {
+        if ($noticia['imagem']) {
+            $imagemPath = BASE_PATH . '/public/uploads/noticias/' . $noticia['imagem'];
+            if (file_exists($imagemPath)) {
+                unlink($imagemPath);
+            }
+        }
+        // Apagar notícia
+        $stmt = $pdo->prepare("DELETE FROM noticias WHERE id = ?");
+        $stmt->execute([$delete_id]);
+
+        header('Location: add_noticia.php');
+        exit;
+    } else {
+        $erro = "Notícia não encontrada para exclusão.";
+    }
+}
+
+// Processar o envio do formulário para adicionar notícia
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
     $titulo = $_POST['titulo'];
     $texto = $_POST['texto'];
-    
-    // Processar imagem
+
     if (isset($_FILES['imagem']) && $_FILES['imagem']['error'] === UPLOAD_ERR_OK) {
         $imagem = $_FILES['imagem'];
         $extensao = pathinfo($imagem['name'], PATHINFO_EXTENSION);
         $nomeFicheiro = 'noticia_' . time() . '.' . $extensao;
         $destino = BASE_PATH . '/public/uploads/noticias/' . $nomeFicheiro;
 
-        // Mover imagem para o diretório correto
         if (move_uploaded_file($imagem['tmp_name'], $destino)) {
-            // Inserir dados no banco de dados
             $stmt = $pdo->prepare("INSERT INTO noticias (titulo, imagem, texto, data_criacao) VALUES (?, ?, ?, NOW())");
             $stmt->execute([$titulo, $nomeFicheiro, $texto]);
             $sucesso = true;
@@ -43,11 +66,27 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Lista de Utilizadores</title>
+    <title>Lista de Notícias</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    .btn-fixed-width {
+        min-width: 80px; /* Ajuste esse valor conforme necessário */
+        text-align: center; /* Centraliza o texto dentro do botão */
+    }
+
+    body {
+        overflow-x: hidden;
+    }
+
+    textarea {
+        resize: none;
+    }
+</style>
+
 </head>
 <body class="bg-light">
-<div class="container py-5">
+<div class="container py-4">
     <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
 
     <h2 class="mt-1">Todas as Notícias</h2>
@@ -70,11 +109,24 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= htmlspecialchars($noticia['titulo']) ?></td>
                         <td><?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></td>
                         <td>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
                             <a href="editar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
-                            <a href="apagar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-danger btn-sm">Apagar</a>
-                            <a href="ocultar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-sm <?= $noticia['visivel'] ? 'btn-secondary' : 'btn-success' ?>">
-                            <?= $noticia['visivel'] ? 'Ocultar' : 'Mostrar' ?>
-</a>
+                            <button 
+                                class="btn btn-danger btn-sm" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#confirmDeleteModal"
+                                data-id="<?= $noticia['id'] ?>"
+                                data-titulo="<?= htmlspecialchars($noticia['titulo'], ENT_QUOTES) ?>"
+                                data-texto="<?= htmlspecialchars($noticia['texto'], ENT_QUOTES) ?>"
+                                data-imagem="<?= htmlspecialchars($noticia['imagem'], ENT_QUOTES) ?>"
+                            >
+                                Apagar
+                            </button>
+                                <a href="ocultar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-sm btn-fixed-width <?= $noticia['visivel'] ? 'btn-secondary' : 'btn-success' ?>">
+                                    <?= $noticia['visivel'] ? 'Ocultar' : 'Mostrar' ?>
+                                </a>
+                            </a>
+                        </div>
                         </td>
                     </tr>
                 <?php endforeach; ?>
@@ -83,11 +135,11 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </table>
     <hr>
     <h2>Adicionar Nova Notícia</h2>
-    
+
     <?php if ($sucesso): ?>
         <div class="alert alert-success">Notícia adicionada com sucesso!</div>
     <?php elseif (!empty($erro)): ?>
-        <div class="alert alert-danger"><?= $erro ?></div>
+        <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
     <?php endif; ?>
 
     <form method="post" enctype="multipart/form-data">
@@ -95,12 +147,12 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <label for="titulo" class="form-label">Título:</label>
             <input type="text" name="titulo" id="titulo" class="form-control" required>
         </div>
-        
+
         <div class="mb-3">
             <label for="imagem" class="form-label">Imagem:</label>
             <input type="file" name="imagem" id="imagem" class="form-control" required>
         </div>
-        
+
         <div class="mb-3">
             <label for="texto" class="form-label">Texto:</label>
             <textarea name="texto" id="texto" class="form-control" rows="5" required></textarea>
@@ -109,6 +161,58 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <button type="submit" class="btn btn-primary">Adicionar Notícia</button>
         <button type="reset" class="btn btn-secondary">Limpar Campos</button>
     </form>
-</main>
+</div>
 
-<?php include BASE_PATH . '/includes/footer.php'; ?> <!-- Caminho correto para footer.php -->
+<!-- Modal de confirmação de exclusão -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <form method="post" id="deleteForm">
+        <input type="hidden" name="delete_id" id="delete_id" value="">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <p>Tem certeza de que deseja excluir esta notícia?</p>
+          <h5 id="modalTitulo"></h5>
+          <p id="modalTexto"></p>
+          <img id="modalImagem" class="img-fluid rounded mb-3" style="max-height: 300px; display: none;" alt="Imagem da notícia">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Sim, excluir</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget;
+
+        var id = button.getAttribute('data-id');
+        var titulo = button.getAttribute('data-titulo');
+        var texto = button.getAttribute('data-texto');
+        var imagem = button.getAttribute('data-imagem');
+
+        // Atualiza conteúdo do modal
+        document.getElementById('delete_id').value = id;
+        document.getElementById('modalTitulo').textContent = titulo;
+        document.getElementById('modalTexto').textContent = texto;
+
+        var modalImagem = document.getElementById('modalImagem');
+        if (imagem) {
+            modalImagem.src = "/public/uploads/noticias/" + imagem;
+            modalImagem.style.display = 'block';
+        } else {
+            modalImagem.style.display = 'none';
+            modalImagem.src = '';
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,9 +1,11 @@
 <?php
+// public/login.php (CONTROLLER)
+
 session_start();
 require_once '../includes/db.php';
 require_once '../includes/mailer.php'; // para enviar o código e email de verificação
 
-$errors = [];
+$errors = []; // Esta variável será passada para a view
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
@@ -61,32 +63,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-?>
 
-<?php include('../includes/header.php'); ?>
-
-<main class="container mt-1">
-    <h2>Iniciar Sessão</h2>
-
-    <?php foreach ($errors as $error): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($error) ?></div>
-    <?php endforeach; ?>
-
-    <form method="post" class="bg-light p-4 rounded shadow-sm">
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" name="email" id="email" required>
-        </div>
-
-        <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" name="password" id="password" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Entrar</button>
-    </form>
-
-    <p class="mt-3">Ainda não tens conta? <a href="register.php">Regista-te aqui</a></p>
-</main>
-
-<?php include('../includes/footer.php'); ?>
+// No final do controller, inclua a view.
+// A variável $errors estará disponível na view.
+include '../includes/header.php'; // Se o header for um include comum a todas as páginas
+include '../views/auth/login.php'; // A view específica do login
+include '../includes/footer.php'; // Se o footer for um include comum a todas as páginas

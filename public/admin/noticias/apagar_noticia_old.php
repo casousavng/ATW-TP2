@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <h4 class="mb-0">Confirmar Exclusão</h4>
         </div>
         <div class="card-body">
-            <p class="mb-3">Tem certeza de que deseja excluir esta notícia?</p>
+            <p class="mb-3">Tens a certeza de que desejas excluir esta notícia?</p>
 
             <h5><?= htmlspecialchars($noticia['titulo']) ?></h5>
             <p><?= nl2br(htmlspecialchars($noticia['texto'])) ?></p>
