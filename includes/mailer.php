@@ -62,4 +62,22 @@ function sendVerificationCode($email, $name, $code) {
 
     return sendEmail($email, $name, 'Código de verificação de login', $body, 'Confirmação de Login');
 }
+
+function sendPasswordResetEmail($email, $name, $token) {
+    $link = "http://localhost:3000/public/reset_senha.php?token=" . urlencode($token);
+
+    $body = "
+        <p>Olá <strong>" . htmlspecialchars($name) . "</strong>,</p>
+        <p>Solicitaste a recuperação de senha. Clique no link abaixo para redefinir a tua senha:</p>
+        <p><a href='$link'>$link</a></p>
+        <p>Este link é válido por 1 hora.</p>
+        <p>Se não solicitaste essa ação, podes ignorar este email.</p>
+    ";
+
+    return sendEmail($email, $name, 'Recuperação de Senha', $body, 'Suporte Comunidade');
+}
+
+
+
+
 ?>
