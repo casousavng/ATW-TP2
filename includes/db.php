@@ -1,5 +1,7 @@
 <?php
 
+# This file is part of the Aiven project.
+
 $uri = "mysql://avnadmin:AVNS_oByomHGLFi4pGWNcKxO@projeto-atw-ispgaya-bf27.j.aivencloud.com:11682/defaultdb?ssl-mode=REQUIRED";
 
 $fields = parse_url($uri);

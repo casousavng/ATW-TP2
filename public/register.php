@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute([$name, $birth_date, $nationality, $country, $email, $phone, $hash, $token]);
 
         if (sendVerificationEmail($email, $name, $token)) {
-            header("Location: register_success.php");
+            header("Location: ../views/auth/sucesso_registo.php");
             exit;
         } else {
             $errors[] = "Erro ao enviar email de verificação.";

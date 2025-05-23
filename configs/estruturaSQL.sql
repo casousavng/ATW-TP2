@@ -1,7 +1,3 @@
--- Criação da base de dados
-CREATE DATABASE comunidade_desportiva DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE comunidade_desportiva;
-
 -- Tabela principal de utilizadores
 CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,6 +10,11 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     is_admin BOOLEAN DEFAULT FALSE,
     email_verified BOOLEAN DEFAULT FALSE,
+    status ENUM('ativo', 'inativo') DEFAULT 'ativo',
+    is_verified TINYINT(1) DEFAULT 0,
+    verification_token VARCHAR(255) DEFAULT NULL,
+    login_token VARCHAR(6) DEFAULT NULL,
+    login_token_expires DATETIME DEFAULT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -26,7 +27,7 @@ CREATE TABLE user_extra_fields (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tokens de verificação de email (valorização)
+-- Tokens de verificação de email
 CREATE TABLE email_verification_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -36,7 +37,7 @@ CREATE TABLE email_verification_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- tabela de artigos
+-- Tabela de artigos
 CREATE TABLE articles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -57,7 +58,7 @@ CREATE TABLE documentos (
     data_upload DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- tabela de imagens em destaque
+-- Tabela de imagens em destaque
 CREATE TABLE imagem_destaque (
     id INT AUTO_INCREMENT PRIMARY KEY,
     caminho VARCHAR(255) NOT NULL,
@@ -70,11 +71,11 @@ CREATE TABLE noticias (
     titulo VARCHAR(255) NOT NULL,
     imagem VARCHAR(255) NOT NULL,
     texto TEXT NOT NULL,
-    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    data_criacao TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    visivel BOOLEAN DEFAULT 1
 );
 
-ALTER TABLE users ADD COLUMN status ENUM('ativo', 'inativo') DEFAULT 'ativo';
-
+-- Tabela de atividades dos utilizadores
 CREATE TABLE atividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
@@ -84,37 +85,33 @@ CREATE TABLE atividades (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-ALTER TABLE noticias ADD COLUMN visivel BOOLEAN DEFAULT 1;
+-- Campos extra configuráveis
+CREATE TABLE extra_fields (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(50) NOT NULL
+);
 
-ALTER TABLE users 
-ADD COLUMN is_verified TINYINT(1) DEFAULT 0,
-ADD COLUMN verification_token VARCHAR(255) DEFAULT NULL;
+-- Valores dos campos extra associados a utilizadores
+CREATE TABLE user_extra_values (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    field_id INT NOT NULL,
+    value TEXT,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (field_id) REFERENCES extra_fields(id) ON DELETE CASCADE
+);
 
+CREATE TABLE password_resets (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    token VARCHAR(64) NOT NULL,
+    expires_at DATETIME NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+);
 
+-- Atualização de dados para o admin (ajuste pós-criação)
 UPDATE users 
 SET is_verified = 1, verification_token = NULL 
 WHERE email = 'admin@admin.com';
-
-ALTER TABLE users 
-ADD COLUMN login_token VARCHAR(6) DEFAULT NULL,
-ADD COLUMN login_token_expires DATETIME DEFAULT NULL;
-
-
-CREATE TABLE extra_fields (
-  id int NOT NULL AUTO_INCREMENT,
-  name varchar(255) NOT NULL,
-  type varchar(50) NOT NULL,
-  PRIMARY KEY (id)
-);
-
-CREATE TABLE user_extra_values (
-  id int NOT NULL AUTO_INCREMENT,
-  user_id int NOT NULL,
-  field_id int NOT NULL,
-  value text,
-  PRIMARY KEY (id),
-  KEY user_id (user_id),
-  KEY field_id (field_id),
-  CONSTRAINT user_extra_values_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-  CONSTRAINT user_extra_values_ibfk_2 FOREIGN KEY (field_id) REFERENCES extra_fields (id) ON DELETE CASCADE
-);

@@ -26,5 +26,9 @@
         <button type="submit" class="btn btn-primary">Entrar</button>
     </form>
 
-    <p class="mt-3">Ainda não tens conta? <a href="register.php">Regista-te aqui</a></p>
+    
+    <p class="mt-3">
+        Ainda não tens conta? <a href="register.php">Regista-te aqui</a><br>
+        Esquecestes-te a tua senha? <a href="../../public/recuperar_senha.php">Recuperar senha</a>
+    </p>
 </main>

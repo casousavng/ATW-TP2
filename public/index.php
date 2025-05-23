@@ -19,103 +19,41 @@ $artigos = $stmtArtigos->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Início</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Comunidade Desportiva - Artigos, Notícias e partilha de Documentos">
+    <meta name="keywords" content="Comunidade Desportiva, Artigos, Notícias, Documentos">
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães">
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/styles_index.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16 / 9;
-            overflow: hidden;
-            background-color: #000;
-        }
+    <title>Comunidade Desportiva</title>
 
+    <style>
         .carousel-slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
             animation: fadeSlide <?= count($imagensDestaque) * 5 ?>s infinite;
         }
 
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        @keyframes fadeSlide {
-            0% { opacity: 0; }
-            5% { opacity: 1; }
-            25% { opacity: 1; }
-            30% { opacity: 0; }
-            100% { opacity: 0; }
-        }
-
-        .scroll-wrapper {
-            overflow-x: auto;
-            display: flex;
-            gap: 1rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .content-card {
-            flex: 0 0 auto;
-            width: 320px;
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-
-        .content-card img {
-            width: 100%;
-            height: auto;
-            max-height: 200px;
-            object-fit: cover;
-            border-radius: 0.25rem;
-        }
-
-        .content-card h5 {
-            margin-top: 0.75rem;
-        }
-
         .content-text {
-            font-size: 1rem;
-            color: #333;
-            margin-top: 0.5rem;
-            line-height: 1.5;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
             -webkit-line-clamp: 6;
-            -webkit-box-orient: vertical;
         }
 
         @media (max-width: 768px) {
-            .scroll-wrapper {
-                flex-direction: column;
-                overflow-x: visible;
-            }
-
-            .content-card {
-                width: 100%;
-            }
-
-            .carousel-container {
-                aspect-ratio: 4 / 3;
-            }
-
             .content-text {
                 -webkit-line-clamp: 5;
             }
         }
     </style>
 </head>
+
 <body class="bg-light">
+
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/public/service-worker.js')
+      .then(reg => console.log('SW registrado!', reg))
+      .catch(err => console.error('SW falhou', err));
+  }
+</script>
 
 <div class="container py-2">
 

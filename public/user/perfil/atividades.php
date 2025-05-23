@@ -19,6 +19,12 @@ $atividades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Área do Utilizador - Comunidade Desportiva">
+    <meta name="keywords" content="Área do Utilizador, Comunidade Desportiva, Atividades">
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães">
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/styles.css">
     <title>Atividades - Área do Utilizador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -50,7 +56,7 @@ $atividades = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     <!-- Conteúdo principal -->
      
-    <main class="container mt-5">
+    <main class="container mt-4">
         <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
         <h2 class="mb-4">Atividades Realizadas</h2>
 
