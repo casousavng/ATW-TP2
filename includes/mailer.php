@@ -77,7 +77,4 @@ function sendPasswordResetEmail($email, $name, $token) {
     return sendEmail($email, $name, 'Recuperação de Senha', $body, 'Suporte Comunidade');
 }
 
-
-
-
 ?>

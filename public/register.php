@@ -3,6 +3,7 @@
 
 require_once '../includes/db.php';
 require_once '../includes/mailer.php';
+require_once '../includes/telegram_bot.php';
 
 $errors = []; // Esta variável será passada para a view
 
@@ -38,6 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("INSERT INTO users (name, birth_date, nationality, country, email, phone, password, verification_token)
                                VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
         $stmt->execute([$name, $birth_date, $nationality, $country, $email, $phone, $hash, $token]);
+        notificarNovoUtilizador($name, $email);
 
         if (sendVerificationEmail($email, $name, $token)) {
             header("Location: ../views/auth/sucesso_registo.php");

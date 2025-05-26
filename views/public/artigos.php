@@ -1,8 +1,6 @@
 <?php
 // views/public/artigos.php (VIEW)
-
-// Não há lógica de consulta ao DB ou processamento de requisição aqui.
-// Apenas exibe o HTML e as variáveis que já foram preparadas pelo controller ($artigos, $searchQuery).
+// Recebe as variáveis $artigos e $searchQuery do controller.
 ?>
 
 <div class="container mt-1">
@@ -16,16 +14,23 @@
         <div class="row">
             <?php foreach ($artigos as $artigo): ?>
                 <div class="col-md-6 mb-4">
-                    <div class="card h-100">
-                        <?php if ($artigo['image']): ?>
-                            <img src="/public<?= htmlspecialchars($artigo['image']) ?>" class="card-img-top" alt="Imagem do artigo">
-                        <?php endif; ?>
-                        <div class="card-body">
-                            <h5 class="card-title"><?= htmlspecialchars($artigo['title']) ?></h5>
-                            <p class="card-text"><?= htmlspecialchars(mb_substr(strip_tags($artigo['content']), 0, 200)) ?>...</p>
-                            <p class="text-muted">Por <?= htmlspecialchars($artigo['author']) ?> em <?= date('d/m/Y', strtotime($artigo['created_at'])) ?></p>
+                    <a href="artigo.php?id=<?= (int)$artigo['id'] ?>" class="text-decoration-none text-reset">
+                        <div class="card h-100">
+                            <?php if (!empty($artigo['image'])): ?>
+                                <img src="/public<?= htmlspecialchars($artigo['image']) ?>" class="card-img-top" alt="Imagem do artigo">
+                            <?php endif; ?>
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($artigo['title']) ?></h5>
+                                <p class="card-text"><?= htmlspecialchars(mb_substr(strip_tags($artigo['content']), 0, 200)) ?>...</p>
+                                <p class="text-muted mb-1">
+                                    Por <?= htmlspecialchars($artigo['author']) ?> em <?= date('d/m/Y', strtotime($artigo['created_at'])) ?>
+                                </p>
+                                <p class="text-muted">
+                                    <?= (int)$artigo['comments_count'] ?> comentário<?= ((int)$artigo['comments_count'] === 1 ? '' : 's') ?>
+                                </p>
                             </div>
-                    </div>
+                        </div>
+                    </a>
                 </div>
             <?php endforeach; ?>
         </div>

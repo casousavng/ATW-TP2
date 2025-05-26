@@ -104,6 +104,7 @@ if (isset($_GET['confirm_action'])) {
     <meta name="description" content="Editar Utilizador">
     <title>Editar Utilizador</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
     <style>
         .status-indicator {
@@ -164,6 +165,32 @@ if (isset($_GET['confirm_action'])) {
             <?php endif; ?>
         </div>
 
+
+    <div class="mb-3">
+        <label class="form-label">Data de Nascimento:</label>
+        <input type="text" class="form-control" value="<?= htmlspecialchars($user['birth_date']) ?>" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Nacionalidade:</label>
+        <input type="text" class="form-control" value="<?= htmlspecialchars($user['nationality']) ?>" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">País:</label>
+        <input type="text" class="form-control" value="<?= htmlspecialchars($user['country']) ?>" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Telefone:</label>
+        <input type="text" class="form-control" value="<?= htmlspecialchars($user['phone']) ?>" disabled>
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Conta Validada:</label>
+        <input type="text" class="form-control" value="<?= $user['is_verified'] ? 'Sim' : 'Não' ?>" disabled>
+    </div>
+
         <h4>Campos Extra</h4>
         <?php foreach ($fields as $field): ?>
             <div class="mb-3">
@@ -190,18 +217,25 @@ if (isset($_GET['confirm_action'])) {
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary mt-3">Guardar</button>
+        <button type="submit" class="btn btn-primary mt-3">
+            <i class="bi bi-save"></i> Guardar
+        </button>
     </form>
 
     <div class="mt-4">
         <?php if (!$isOnlyAdmin): ?>
             <?php if ($user['status'] === 'ativo'): ?>
-                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">Inativar Utilizador</button>
+                <button class="btn btn-warning me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">
+                    <i class="bi bi-person-x"></i> Inativar Utilizador
+                </button>
             <?php else: ?>
-                <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">Ativar Utilizador</button>
+                <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="inactive">
+                    <i class="bi bi-person-check"></i> Ativar Utilizador
+                </button>
             <?php endif; ?>
-
-            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="delete">Apagar Utilizador</button>
+            <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmModal" data-action="delete">
+                <i class="bi bi-trash"></i> Apagar Utilizador
+            </button>
         <?php else: ?>
             <div class="alert alert-danger mt-3">Não é possível inativar ou apagar o único administrador.</div>
         <?php endif; ?>

@@ -38,6 +38,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['user_name'] = $user['name'];
                 $_SESSION['is_admin'] = $user['is_admin'];
 
+                // Registar atividade de login
+                $stmtLog = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
+                $stmtLog->execute([$user['id'], 'Login efetuado', 'login']);
+
                 // Limpa sessão temporária e token do utilizador
                 unset($_SESSION['temp_user_id']);
                 $stmt = $pdo->prepare("UPDATE users SET login_token = NULL, login_token_expires = NULL WHERE id = ?");

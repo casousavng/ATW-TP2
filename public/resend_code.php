@@ -17,13 +17,14 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($user) {
     $code = random_int(100000, 999999);
+    $code_hash = hash('sha256', $code);
     $expires = date('Y-m-d H:i:s', time() + 300); // 5 min
 
-    // Atualiza novo código e validade
+    // Atualiza novo código (hashed) e validade
     $stmt = $pdo->prepare("UPDATE users SET login_token = ?, login_token_expires = ? WHERE id = ?");
-    $stmt->execute([$code, $expires, $user['id']]);
+    $stmt->execute([$code_hash, $expires, $user['id']]);
 
-    // Envia o código
+    // Envia o código original (não o hash)
     sendVerificationCode($user['email'], $user['name'], $code);
 }
 

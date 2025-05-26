@@ -11,7 +11,6 @@ $erro = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
 
-    // Buscar notícia para deletar imagem
     $stmt = $pdo->prepare("SELECT imagem FROM noticias WHERE id = ?");
     $stmt->execute([$delete_id]);
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -23,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
                 unlink($imagemPath);
             }
         }
-        // Apagar notícia
+
         $stmt = $pdo->prepare("DELETE FROM noticias WHERE id = ?");
         $stmt->execute([$delete_id]);
 
@@ -57,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
     }
 }
 
-// Buscar todas as notícias para exibir
 $stmt = $pdo->query("SELECT * FROM noticias ORDER BY data_criacao DESC");
 $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
@@ -71,26 +69,26 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Lista de Notícias</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
-<style>
-    .btn-fixed-width {
-        min-width: 80px; /* Ajuste esse valor conforme necessário */
-        text-align: center; /* Centraliza o texto dentro do botão */
-    }
-
-    body {
-        overflow-x: hidden;
-    }
-
-    textarea {
-        resize: none;
-    }
-</style>
-
+    <style>
+        .btn-fixed-width {
+            min-width: 100px;
+            text-align: center;
+        }
+        body {
+            overflow-x: hidden;
+        }
+        textarea {
+            resize: none;
+        }
+    </style>
 </head>
 <body class="bg-light">
 <div class="container py-4">
-    <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+    <a href="../index.php" class="btn btn-outline-secondary mb-4">
+        <i class="bi bi-arrow-left"></i> Voltar
+    </a>
 
     <h2 class="mt-1">Todas as Notícias</h2>
     <table class="table table-striped mt-3">
@@ -102,18 +100,21 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </tr>
         </thead>
         <tbody>
-            <?php if (empty($noticias)): ?>
+        <?php if (empty($noticias)): ?>
+            <tr>
+                <td colspan="3" class="text-center">Não há notícias publicadas de momento.</td>
+            </tr>
+        <?php else: ?>
+            <?php foreach ($noticias as $noticia): ?>
                 <tr>
-                    <td colspan="3" class="text-center">Não há notícias publicadas de momento.</td>
-                </tr>
-            <?php else: ?>
-                <?php foreach ($noticias as $noticia): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($noticia['titulo']) ?></td>
-                        <td><?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></td>
-                        <td>
+                    <td><?= htmlspecialchars($noticia['titulo']) ?></td>
+                    <td><?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></td>
+                    <td>
                         <div class="d-flex flex-column flex-sm-row gap-2">
-                            <a href="editar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-warning btn-sm">Editar</a>
+                            <a href="editar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Editar
+                            </a>
+
                             <button 
                                 class="btn btn-danger btn-sm" 
                                 data-bs-toggle="modal" 
@@ -123,19 +124,21 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 data-texto="<?= htmlspecialchars($noticia['texto'], ENT_QUOTES) ?>"
                                 data-imagem="<?= htmlspecialchars($noticia['imagem'], ENT_QUOTES) ?>"
                             >
-                                Apagar
+                                <i class="bi bi-trash"></i> Apagar
                             </button>
-                                <a href="ocultar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-sm btn-fixed-width <?= $noticia['visivel'] ? 'btn-secondary' : 'btn-success' ?>">
-                                    <?= $noticia['visivel'] ? 'Ocultar' : 'Mostrar' ?>
-                                </a>
+
+                            <a href="ocultar_noticia.php?id=<?= $noticia['id'] ?>" class="btn btn-sm btn-fixed-width <?= $noticia['visivel'] ? 'btn-secondary' : 'btn-success' ?>">
+                                <i class="bi <?= $noticia['visivel'] ? 'bi-eye-slash' : 'bi-eye' ?>"></i>
+                                <?= $noticia['visivel'] ? 'Ocultar' : 'Mostrar' ?>
                             </a>
                         </div>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php endif; ?>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        <?php endif; ?>
         </tbody>
     </table>
+
     <hr>
     <h2>Adicionar Nova Notícia</h2>
 
@@ -161,34 +164,42 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <textarea name="texto" id="texto" class="form-control" rows="5" required></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Adicionar Notícia</button>
-        <button type="reset" class="btn btn-secondary">Limpar Campos</button>
+        <button type="submit" class="btn btn-primary">
+            <i class="bi bi-plus-circle"></i> Adicionar Notícia
+        </button>
+        <button type="reset" class="btn btn-secondary">
+            <i class="bi bi-x-circle"></i> Limpar Campos
+        </button>
     </form>
 </div>
 
 <!-- Modal de confirmação de exclusão -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered modal-lg">
-    <div class="modal-content">
-      <form method="post" id="deleteForm">
-        <input type="hidden" name="delete_id" id="delete_id" value="">
-        <div class="modal-header bg-danger text-white">
-          <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <form method="post" id="deleteForm">
+                <input type="hidden" name="delete_id" id="delete_id" value="">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem certeza de que deseja excluir esta notícia?</p>
+                    <h5 id="modalTitulo"></h5>
+                    <p id="modalTexto"></p>
+                    <img id="modalImagem" class="img-fluid rounded mb-3" style="max-height: 300px; display: none;" alt="Imagem da notícia">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Sim, excluir
+                    </button>
+                </div>
+            </form>
         </div>
-        <div class="modal-body">
-          <p>Tem certeza de que deseja excluir esta notícia?</p>
-          <h5 id="modalTitulo"></h5>
-          <p id="modalTexto"></p>
-          <img id="modalImagem" class="img-fluid rounded mb-3" style="max-height: 300px; display: none;" alt="Imagem da notícia">
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-danger">Sim, excluir</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -202,7 +213,6 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         var texto = button.getAttribute('data-texto');
         var imagem = button.getAttribute('data-imagem');
 
-        // Atualiza conteúdo do modal
         document.getElementById('delete_id').value = id;
         document.getElementById('modalTitulo').textContent = titulo;
         document.getElementById('modalTexto').textContent = texto;

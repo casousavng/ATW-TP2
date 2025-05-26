@@ -32,15 +32,21 @@ foreach ($extra_values_raw as $ev) {
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Área do Utilizador - Comunidade Desportiva">
-    <meta name="keywords" content="Área do Utilizador, Comunidade Desportiva, Artigos, Notícias, Documentos">
-    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães">
-    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="../assets/css/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Área do Utilizador - Comunidade Desportiva" />
+    <meta name="keywords" content="Área do Utilizador, Comunidade Desportiva, Artigos, Notícias, Documentos" />
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
     <title>Área do Utilizador</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
     <style>
         html, body {
             height: 100%;
@@ -71,7 +77,9 @@ foreach ($extra_values_raw as $ev) {
     <header class="bg-dark text-white py-3 mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="mb-0 fs-3">Área do Utilizador</h1>
-            <a href="../logout.php" class="btn btn-danger">Terminar Sessão</a>
+            <a href="../logout.php" class="btn btn-danger">
+                <i class="bi bi-box-arrow-right"></i> Terminar Sessão
+            </a>
         </div>
     </header>
 
@@ -85,7 +93,9 @@ foreach ($extra_values_raw as $ev) {
                     <div class="card-body">
                         <h5 class="card-title">Dados Pessoais</h5>
                         <p class="card-text">Consulta os teus dados pessoais e edita as informações quando necessário.</p>
-                        <a href="perfil/edit.php" class="btn btn-primary">Editar Perfil</a>
+                        <a href="perfil/edit.php" class="btn btn-primary">
+                            <i class="bi bi-person-fill"></i> Editar Perfil
+                        </a>
                     </div>
                 </div>
             </div>
@@ -96,7 +106,9 @@ foreach ($extra_values_raw as $ev) {
                     <div class="card-body">
                         <h5 class="card-title">Meus Artigos</h5>
                         <p class="card-text">Cria e edita os artigos que partilhas com a comunidade.</p>
-                        <a href="artigos/artigos.php" class="btn btn-info">Gerir Artigos</a>
+                        <a href="artigos/artigos.php" class="btn btn-info text-white">
+                            <i class="bi bi-journal-text"></i> Gerir Artigos
+                        </a>
                     </div>
                 </div>
             </div>
@@ -107,7 +119,9 @@ foreach ($extra_values_raw as $ev) {
                     <div class="card-body">
                         <h5 class="card-title">Histórico de Atividades</h5>
                         <p class="card-text">Vê o histórico de atividades recentes realizadas na tua conta.</p>
-                        <a href="perfil/atividades.php" class="btn btn-info">Ver Histórico</a>
+                        <a href="perfil/atividades.php" class="btn btn-info text-white">
+                            <i class="bi bi-clock-history"></i> Ver Histórico
+                        </a>
                     </div>
                 </div>
             </div>

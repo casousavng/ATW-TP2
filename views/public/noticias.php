@@ -15,15 +15,23 @@
             Não há notícias disponíveis no momento.
         </div>
     <?php else: ?>
-        <?php foreach ($noticias as $noticia): ?>
-            <article class="mb-4">
-                <h2><?= htmlspecialchars($noticia['titulo']) ?></h2>
-                <p><?= nl2br(htmlspecialchars($noticia['texto'])) ?></p>
-                <?php if ($noticia['imagem']): ?>
-                    <img src="/public/uploads/noticias/<?= htmlspecialchars($noticia['imagem']) ?>" alt="<?= htmlspecialchars($noticia['titulo']) ?>" class="img-fluid">
-                <?php endif; ?>
-                <p><small>Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
-            </article>
-        <?php endforeach; ?>
+        <div class="row">
+            <?php foreach ($noticias as $noticia): ?>
+                <div class="col-md-6 mb-4">
+                    <a href="noticia.php?id=<?= $noticia['id'] ?>" class="text-decoration-none text-reset">
+                        <article class="card h-100">
+                            <?php if ($noticia['imagem']): ?>
+                                <img src="/public/uploads/noticias/<?= htmlspecialchars($noticia['imagem']) ?>" alt="<?= htmlspecialchars($noticia['titulo']) ?>" class="card-img-top">
+                            <?php endif; ?>
+                            <div class="card-body">
+                                <h5 class="card-title"><?= htmlspecialchars($noticia['titulo']) ?></h5>
+                                <p class="card-text"><?= nl2br(htmlspecialchars(mb_strimwidth($noticia['texto'], 0, 200, '...'))) ?></p>
+                                <p><small class="text-muted">Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
+                            </div>
+                        </article>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
     <?php endif; ?>
 </main>

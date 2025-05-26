@@ -102,15 +102,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Editar Artigo - Área do Utilizador">
-    <meta name="keywords" content="Editar Artigo, Área do Utilizador, Comunidade Desportiva">
-    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães">
-    <link rel="icon" href="../../assets/favicon/favicon.jpg" type="image/x-icon">
-    <link rel="stylesheet" href="../../assets/css/styles.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Editar Artigo - Área do Utilizador" />
+    <meta name="keywords" content="Editar Artigo, Área do Utilizador, Comunidade Desportiva" />
+    <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
+    <link rel="icon" href="../../assets/favicon/favicon.jpg" type="image/x-icon" />
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../assets/css/styles.css" />
+
     <title>Editar Artigo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div class="container mt-4">
@@ -126,38 +133,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         </div>
     <?php endif; ?>
 
-    <form method="POST" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data" class="mb-4">
         <div class="mb-3">
             <label for="title" class="form-label">Título</label>
-            <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($title) ?>">
+            <input type="text" name="title" id="title" class="form-control" value="<?= htmlspecialchars($title) ?>" required>
         </div>
 
         <div class="mb-3">
-            <label for="image">Imagem Atual</label>
+            <label class="form-label">Imagem Atual</label>
             <?php if ($imagePath): ?>
-                <div class="mt-2">
+                <div class="mb-3">
                     <img src="../../<?= htmlspecialchars($imagePath) ?>" alt="Imagem atual" class="img-thumbnail" style="max-height: 200px;">
                 </div>
-            <?php endif; ?><br>
+            <?php else: ?>
+                <p class="text-muted">Sem imagem.</p>
+            <?php endif; ?>
             <label for="image" class="form-label">Nova Imagem (opcional)</label>
-            <input type="file" name="image" id="image" class="form-control">
+            <input type="file" name="image" id="image" class="form-control" accept=".jpg,.jpeg,.png,.gif">
         </div>
 
         <div class="mb-3">
             <label for="content" class="form-label">Conteúdo</label>
-            <textarea name="content" id="content" class="form-control" rows="6"><?= htmlspecialchars($content) ?></textarea>
+            <textarea name="content" id="content" class="form-control" rows="6" required><?= htmlspecialchars($content) ?></textarea>
         </div>
 
-        <button type="submit" name="update" class="btn btn-primary">Guardar Alterações</button>
-        <a href="artigos.php" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" name="update" class="btn btn-primary">
+            <i class="bi bi-save2"></i> Guardar Alterações
+        </button>
+        <a href="artigos.php" class="btn btn-secondary ms-2">
+            <i class="bi bi-x-lg"></i> Cancelar
+        </a>
     </form>
 
     <hr>
 
     <form method="POST" onsubmit="return confirm('Tens a certeza que queres apagar este artigo? Esta ação não pode ser desfeita.');">
-        <button type="submit" name="delete" class="btn btn-danger">🗑️ Apagar Artigo</button>
+        <button type="submit" name="delete" class="btn btn-danger">
+            <i class="bi bi-trash"></i> Apagar Artigo
+        </button>
     </form>
     <br>
 </div>
+
+<!-- Bootstrap JS Bundle (Popper incluído) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

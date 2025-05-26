@@ -111,6 +111,34 @@ CREATE TABLE password_resets (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
+-- Tabela de tentativas de login
+CREATE TABLE login_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255),
+    ip_address VARCHAR(45),
+    attempt_time DATETIME
+);
+
+-- tabela de logs de login
+CREATE TABLE login_logs (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NULL,
+    email VARCHAR(255),
+    ip_address VARCHAR(45),
+    status ENUM('success', 'fail'),
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Tabela de comentários nos artigos
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    article_id INT NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    comment VARCHAR(100) NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
+);
+
 -- Atualização de dados para o admin (ajuste pós-criação)
 UPDATE users 
 SET is_verified = 1, verification_token = NULL 

@@ -10,8 +10,15 @@ checkAdmin(); // Garante que o utilizador é administrador
 <head>
     <meta charset="UTF-8">
     <title>Painel de Administração</title>
+    <meta name="description" content="Painel de administração para gestão de utilizadores, artigos, documentos e mais.">
+    <meta name="keywords" content="administração, gestão, utilizadores, artigos, documentos, notícias">
+    <meta name="author" content="Comunidade Desportiva">
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- Responsivo -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Import do Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <style>
         html, body {
             height: 100%;
@@ -71,7 +78,9 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Utilizadores</h5>
                         <p class="card-text">Faz a gestão dos membros da tua comunidade. Edita os dados ou faz alteração de status.</p>
-                        <a href="gerir_utilizadores/users.php" class="btn btn-primary">Gerir</a>
+                        <a href="gerir_utilizadores/users.php" class="btn btn-primary">
+                            <i class="bi bi-gear-fill me-1"></i> Gerir
+                        </a>
                     </div>
                 </div>
             </div>
@@ -82,7 +91,8 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Campos Extra</h5>
                         <p class="card-text">Configura campos personalizados para os perfis dos teus utilizadores.</p>
-                        <a href="gerir_utilizadores/manage_extra_fields.php" class="btn btn-primary">Gerir</a>
+                        <a href="gerir_utilizadores/manage_extra_fields.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir
+                        </a>
                     </div>
                 </div>
             </div>
@@ -93,7 +103,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Artigos</h5>
                         <p class="card-text">Faz a gestão dos artigos publicados pela tua comunidade.</p>
-                        <a href="gerir_artigos/artigos.php" class="btn btn-primary">Gerir</a>
+                        <a href="gerir_artigos/artigos.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir</a>
                     </div>
                 </div>
             </div>
@@ -104,7 +114,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Documentos</h5>
                         <p class="card-text">Faz upload, edita ou remove documentos partilhados com a comunidade.</p>
-                        <a href="documentos/manage_documents.php" class="btn btn-primary">Gerir</a>
+                        <a href="documentos/manage_documents.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir</a>
                     </div>
                 </div>
             </div>
@@ -115,7 +125,7 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Imagem em Destaque</h5>
                         <p class="card-text">Faz upload, edita ou remove a imagem em destaque.</p>
-                        <a href="destaques/editar_imagem_destaque.php" class="btn btn-primary">Gerir</a>
+                        <a href="destaques/editar_imagem_destaque.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir</a>
                     </div>
                 </div>
             </div>
@@ -126,12 +136,25 @@ checkAdmin(); // Garante que o utilizador é administrador
                     <div class="card-body">
                         <h5 class="card-title">Gestão de Notícias</h5>
                         <p class="card-text">Cria, edita ou remove notícias partilhadas com a comunidade.</p>
-                        <a href="noticias/add_noticia.php" class="btn btn-primary">Gerir</a>
+                        <a href="noticias/add_noticia.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir</a>
+                    </div>
+                </div>
+            </div>
+        
+            <!-- Gestão de Acessos -->
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestão de Acessos</h5>
+                        <p class="card-text">Consulta os registos de login e tentativas de intrusão.</p>
+                        <a href="gerir_utilizadores/gestao_acessos.php" class="btn btn-primary">
+                            <i class="bi bi-search me-1"></i> Ver Registos
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
+        </main>
 
     <!-- Scripts Bootstrap -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

@@ -41,9 +41,15 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="keywords" content="Gestão de Artigos, Comunidade Desportiva">
+    <meta name="author" content="Comunidade Desportiva">
     <meta name="description" content="Gestão de Artigos">
     <title>Admin - Gestão de Artigos</title>
+    <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         @media (max-width: 768px) {
             .table-view { display: none; }
@@ -91,11 +97,17 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?= $art['is_visible'] ? 'Sim' : 'Não' ?></td>
                         <td>
                             <?php if ($art['is_visible']): ?>
-                                <a href="ocultar_artigo.php?id=<?= $art['id'] ?>&action=hide" class="btn btn-sm btn-secondary fixed-btn">Ocultar</a>
+                                <a href="ocultar_artigo.php?id=<?= $art['id'] ?>&action=hide" class="btn btn-sm btn-secondary fixed-btn" title="Ocultar">
+                                    <i class="bi bi-eye-slash"></i> Ocultar
+                                </a>
                             <?php else: ?>
-                                <a href="ocultar_artigo.php?id=<?= $art['id'] ?>&action=show" class="btn btn-sm btn-success fixed-btn">Mostrar</a>
+                                <a href="ocultar_artigo.php?id=<?= $art['id'] ?>&action=show" class="btn btn-sm btn-success fixed-btn" title="Mostrar">
+                                    <i class="bi bi-eye"></i> Mostrar
+                                </a>
                             <?php endif; ?>
-                            <button class="btn btn-sm btn-danger fixed-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $art['id'] ?>">Apagar</button>
+                            <button class="btn btn-sm btn-danger fixed-btn" data-bs-toggle="modal" data-bs-target="#deleteModal" data-id="<?= $art['id'] ?>" title="Apagar">
+                                <i class="bi bi-trash"></i> Apagar
+                            </button>
                         </td>
                     </tr>
                 <?php endforeach; ?>
