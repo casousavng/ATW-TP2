@@ -1,7 +1,7 @@
 <?php
-// public/artigo.php (CONTROLLER)
-
-require_once("../includes/db.php"); // Liga à base de dados
+session_start();
+require_once("../includes/db.php");
+require_once("../includes/mailer.php");
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Artigo inválido.");
@@ -9,7 +9,6 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
 
 $articleId = (int)$_GET['id'];
 
-// Buscar artigo
 $stmt = $pdo->prepare("
     SELECT a.*, u.name AS author 
     FROM articles a 
@@ -28,20 +27,13 @@ $name = '';
 $email = '';
 $comment = '';
 
-// Processar envio do comentário
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     $name = trim($_POST['name'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $comment = trim($_POST['comment'] ?? '');
 
-    if (empty($name)) {
-        $errors[] = "O nome é obrigatório.";
-    }
-
-    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $errors[] = "Email inválido.";
-    }
-
+    if (empty($name)) $errors[] = "O nome é obrigatório.";
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) $errors[] = "Email inválido.";
     if (empty($comment)) {
         $errors[] = "O comentário é obrigatório.";
     } elseif (mb_strlen($comment) > 100) {
@@ -49,22 +41,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     }
 
     if (empty($errors)) {
-        // Inserir comentário (email não é salvo, só nome e comentário)
-        $stmt = $pdo->prepare("INSERT INTO comments (article_id, name, comment) VALUES (?, ?, ?)");
-        $stmt->execute([$articleId, $name, $comment]);
+        $token = bin2hex(random_bytes(32));
 
-        // Redirecionar para evitar reenvio do formulário
-        header("Location: artigo.php?id=$articleId");
+        $stmt = $pdo->prepare("
+            INSERT INTO comments (article_id, name, email, comment, token, is_verified) 
+            VALUES (?, ?, ?, ?, ?, 0)
+        ");
+        $stmt->execute([$articleId, $name, $email, $comment, $token]);
+
+        sendCommentVerificationEmail(
+            $email,
+            $name,
+            $token
+        );
+
+        header("Location: artigo.php?id=$articleId&pending=1");
         exit;
     }
 }
 
-// Buscar comentários do artigo
-$stmt = $pdo->prepare("SELECT * FROM comments WHERE article_id = ? ORDER BY created_at DESC");
+$stmt = $pdo->prepare("
+    SELECT * FROM comments 
+    WHERE article_id = ? AND is_verified = 1 
+    ORDER BY created_at DESC
+");
 $stmt->execute([$articleId]);
 $comments = $stmt->fetchAll();
 
-// Chama a view
+$voltar_para = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'artigos.php';
+
 include '../includes/header.php';
 include '../views/public/artigo.php';
 include '../includes/footer.php';
+?>

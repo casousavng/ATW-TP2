@@ -136,7 +136,7 @@ if (isset($_GET['confirm_action'])) {
 </head>
 <body class="bg-light">
 <div class="container py-4">
-    <a href="users.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+    <a href="users.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
 
     <div class="header-with-status mb-4">
         <h1 class="mb-0">Editar Utilizador</h1>

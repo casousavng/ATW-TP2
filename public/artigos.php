@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 // public/artigos.php (CONTROLLER)
 
 require_once '../includes/db.php';
@@ -35,6 +37,14 @@ if ($searchQuery) {
 }
 
 $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+function getExcerptWithMore($content, $id, $maxSentences = 1) {
+    $text = strip_tags($content);
+    $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+    $excerpt = implode(' ', array_slice($sentences, 0, $maxSentences));
+
+    return htmlspecialchars($excerpt) . ' (Clica para ler mais) ';
+}
 
 // Incluir header, view e footer
 include '../includes/header.php';

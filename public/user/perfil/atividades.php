@@ -57,13 +57,14 @@ $totalPages = ceil($totalAtividades / $itemsPerPage);
     <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
     <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/css/styles.css" />
-    <title>Atividades - Área do Utilizador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <title>Atividades - Área do Utilizador</title>
 </head>
 <body class="bg-light">
 
     <main class="container mt-4">
-        <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+        <a href="../index.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
         <h2 class="mb-4">Atividades Realizadas</h2>
 
         <!-- Filtro de tipo -->

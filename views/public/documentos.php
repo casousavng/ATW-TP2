@@ -1,6 +1,5 @@
 <?php
 // views/public/documentos.php (VIEW)
-
 // Não há lógica de consulta ao DB ou processamento de requisição aqui.
 // Apenas exibe o HTML e as variáveis que já foram preparadas pelo controller ($searchQuery, $documentos).
 ?>

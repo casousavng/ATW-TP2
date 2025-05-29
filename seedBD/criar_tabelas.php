@@ -1,5 +1,12 @@
--- Tabela principal de utilizadores
-CREATE TABLE users (
+<?php
+// cria_tabelas.php
+
+// Inclui o ficheiro de conexão à BD
+require_once '../includes/db.php';
+
+// SQL para criar as tabelas (coloca tudo numa string)
+$sql = <<<SQL
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     birth_date DATE NOT NULL,
@@ -18,8 +25,7 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de campos extra (para uso do admin)
-CREATE TABLE user_extra_fields (
+CREATE TABLE IF NOT EXISTS user_extra_fields (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     field_name VARCHAR(50) NOT NULL,
@@ -27,8 +33,7 @@ CREATE TABLE user_extra_fields (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tokens de verificação de email
-CREATE TABLE email_verification_tokens (
+CREATE TABLE IF NOT EXISTS email_verification_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token VARCHAR(64) NOT NULL,
@@ -37,8 +42,7 @@ CREATE TABLE email_verification_tokens (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Tabela de artigos
-CREATE TABLE articles (
+CREATE TABLE IF NOT EXISTS articles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     title VARCHAR(255) NOT NULL,
@@ -50,23 +54,20 @@ CREATE TABLE articles (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Tabela de documentos
-CREATE TABLE documentos (
+CREATE TABLE IF NOT EXISTS documentos (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nome_personalizado VARCHAR(255) NOT NULL,
     nome_ficheiro VARCHAR(255) NOT NULL,
     data_upload DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de imagens em destaque
-CREATE TABLE imagem_destaque (
+CREATE TABLE IF NOT EXISTS imagem_destaque (
     id INT AUTO_INCREMENT PRIMARY KEY,
     caminho VARCHAR(255) NOT NULL,
     atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
--- Tabela de notícias
-CREATE TABLE noticias (
+CREATE TABLE IF NOT EXISTS noticias (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     imagem VARCHAR(255) NOT NULL,
@@ -75,8 +76,7 @@ CREATE TABLE noticias (
     visivel BOOLEAN DEFAULT 1
 );
 
--- Tabela de atividades dos utilizadores
-CREATE TABLE atividades (
+CREATE TABLE IF NOT EXISTS atividades (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     descricao VARCHAR(255) NOT NULL,
@@ -85,15 +85,13 @@ CREATE TABLE atividades (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
--- Campos extra configuráveis
-CREATE TABLE extra_fields (
+CREATE TABLE IF NOT EXISTS extra_fields (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     type VARCHAR(50) NOT NULL
 );
 
--- Valores dos campos extra associados a utilizadores
-CREATE TABLE user_extra_values (
+CREATE TABLE IF NOT EXISTS user_extra_values (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     field_id INT NOT NULL,
@@ -102,7 +100,7 @@ CREATE TABLE user_extra_values (
     FOREIGN KEY (field_id) REFERENCES extra_fields(id) ON DELETE CASCADE
 );
 
-CREATE TABLE password_resets (
+CREATE TABLE IF NOT EXISTS password_resets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token VARCHAR(64) NOT NULL,
@@ -111,16 +109,14 @@ CREATE TABLE password_resets (
     FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
--- Tabela de tentativas de login
-CREATE TABLE login_attempts (
+CREATE TABLE IF NOT EXISTS login_attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255),
     ip_address VARCHAR(45),
     attempt_time DATETIME
 );
 
--- tabela de logs de login
-CREATE TABLE login_logs (
+CREATE TABLE IF NOT EXISTS login_logs (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NULL,
     email VARCHAR(255),
@@ -129,17 +125,58 @@ CREATE TABLE login_logs (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
--- Tabela de comentários nos artigos
-CREATE TABLE comments (
+CREATE TABLE IF NOT EXISTS comments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     article_id INT NOT NULL,
     name VARCHAR(100) NOT NULL,
+    email VARCHAR(255),
     comment VARCHAR(100) NOT NULL,
+    is_verified TINYINT(1) DEFAULT 0,
+    verification_token VARCHAR(64) DEFAULT NULL,
+    token VARCHAR(64),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 
--- Atualização de dados para o admin (ajuste pós-criação)
 UPDATE users 
-SET is_verified = 1, verification_token = NULL 
+SET is_verified = 1, verification_token = NULL, is_admin = 1, email_verified = 1
 WHERE email = 'admin@admin.com';
+SQL;
+
+// Cria o administrador se não existir
+try {
+    $pdo->exec($sql);
+    
+    // Verificar se o admin já existe
+    $stmt = $pdo->prepare("SELECT id FROM users WHERE email = :email");
+    $stmt->execute([':email' => 'admin@admin.com']);
+    $adminExiste = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if (!$adminExiste) {
+        // Criar o admin com password hash
+        $passwordAdmin = password_hash('admin', PASSWORD_DEFAULT);
+        $stmtInsert = $pdo->prepare("INSERT INTO users (name, birth_date, nationality, country, email, phone, password, is_admin, email_verified, is_verified, status) VALUES (:name, :birth_date, :nationality, :country, :email, :phone, :password, :is_admin, :email_verified, :is_verified, :status)");
+        $stmtInsert->execute([
+            ':name' => 'Admin',
+            ':birth_date' => '2000-01-01',
+            ':nationality' => 'PT',
+            ':country' => 'Portugal',
+            ':email' => 'admin@admin.com',
+            ':phone' => '',
+            ':password' => $passwordAdmin,
+            ':is_admin' => 1,
+            ':email_verified' => 1,
+            ':is_verified' => 1,
+            ':status' => 'ativo',
+        ]);
+        echo "Tabelas criadas / atualizadas com sucesso.\nAdmin criado com sucesso (admin@admin.com / admin).";
+    } else {
+        // Se admin já existe, garante que está configurado corretamente (atualiza)
+        $stmtUpdate = $pdo->prepare("UPDATE users SET is_admin = 1, email_verified = 1, is_verified = 1 WHERE email = :email");
+        $stmtUpdate->execute([':email' => 'admin@admin.com']);
+        echo "Tabelas criadas / atualizadas com sucesso.\nAdmin já existia, dados atualizados.";
+    }
+    
+} catch (PDOException $e) {
+    echo "Erro ao criar as tabelas: " . $e->getMessage();
+}

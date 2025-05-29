@@ -1,21 +1,26 @@
 <?php
+// Conexão com a base de dados AIVEN
 
-# This file is part of the Aiven project.
-
-$uri = "mysql://avnadmin:AVNS_oByomHGLFi4pGWNcKxO@projeto-atw-ispgaya-bf27.j.aivencloud.com:11682/defaultdb?ssl-mode=REQUIRED";
-
-$fields = parse_url($uri);
-
-$conn = "mysql:";
-$conn .= "host=" . $fields["host"];
-$conn .= ";port=" . $fields["port"];
-$conn .= ";dbname=defaultdb";
-$conn .= ";sslmode=verify-ca;sslrootcert=ca.pem";
+$env = parse_ini_file(__DIR__ . '/../.env');
 
 try {
-  $pdo = new PDO($conn, $fields["user"], $fields["pass"]);
-  $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $user     = $env['DB_USER'];
+    $password = $env['DB_PASSWORD'];
+    $host     = $env['DB_HOST'];
+    $port     = $env['DB_PORT'];
+    $dbname   = $env['DB_NAME'];
+    $ssl_mode = $env['DB_SSL_MODE'];
+
+    $connStr = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
+
+    $options = [
+        PDO::MYSQL_ATTR_SSL_CA => __DIR__ . '/../ca.pem',
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+    ];
+
+    $pdo = new PDO($connStr, $user, $password, $options);
+
 } catch (Exception $e) {
-  echo "Erro: " . $e->getMessage();
-  exit;
+    echo "Erro de ligação à base de dados AIVEN: " . $e->getMessage();
+    exit;
 }

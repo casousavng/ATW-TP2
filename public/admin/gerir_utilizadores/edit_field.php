@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body class="bg-light">
     <div class="container py-5">
-        <a href="manage_extra_fields.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+        <a href="manage_extra_fields.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
         <h1 class="mb-4">Editar Campo Extra</h1>
 
         <!-- Mensagens de erro e sucesso -->

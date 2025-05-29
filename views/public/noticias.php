@@ -1,6 +1,5 @@
 <?php
 // views/public/noticias.php (VIEW)
-
 // Não há lógica de consulta ao DB ou processamento de requisição aqui.
 // Apenas exibe o HTML e as variáveis que já foram preparadas pelo controller ($searchQuery, $noticias).
 ?>
@@ -25,7 +24,7 @@
                             <?php endif; ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($noticia['titulo']) ?></h5>
-                                <p class="card-text"><?= nl2br(htmlspecialchars(mb_strimwidth($noticia['texto'], 0, 200, '...'))) ?></p>
+                                <p class="card-text"><?= getExcerptWithMore($noticia['texto'], $noticia['id']) ?></p>
                                 <p><small class="text-muted">Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
                             </div>
                         </article>

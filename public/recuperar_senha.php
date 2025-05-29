@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 // Recuperar Senha
 require_once '../includes/db.php';
 require_once '../includes/mailer.php'; 

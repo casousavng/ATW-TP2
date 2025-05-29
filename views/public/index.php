@@ -1,3 +1,7 @@
+<?php
+// views/public/index.php (VIEW)
+?>
+
 <!DOCTYPE html>
 <html lang="pt">
 <head>
@@ -7,61 +11,41 @@
     <meta name="keywords" content="Comunidade Desportiva, Artigos, Notícias, Documentos" />
     <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
     <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon" />
-    <link rel="stylesheet" href="../assets/css/styles_index.css" />
+    <link rel="stylesheet" href="../assets/css/style_index.css" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <title>Comunidade Desportiva</title>
 
     <style>
 
-        /* === RESPONSIVO === */
-@media (max-width: 992px) {
-    .content-card {
-        width: calc(50% - 0.5rem);
-        height: 350px;
-    }
+        .carousel-slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+            /* Usaremos animação para alternar */
+            animation: fadeSlide <?= count($imagensDestaque) * 5 ?>s infinite;
+        }
+        <?php foreach ($imagensDestaque as $index => $img): ?>
+            .carousel-slide:nth-child(<?= $index + 1 ?>) {
+                animation-delay: <?= $index * 5 ?>s;
+            }
+        <?php endforeach; ?>
 
-    .content-card img {
-        width: 45%;
-    }
+        /* RESPONSIVO */
+        @media (max-width: 992px) {
+            .content-text {
+                -webkit-line-clamp: 5;
+                max-height: calc(1.3em * 5);
+            }
+        }
 
-    .content-card-content {
-        width: 55%;
-    }
-
-    .content-text {
-        -webkit-line-clamp: 5;
-    }
-}
-
-@media (max-width: 576px) {
-    .cards-container {
-        max-width: 100%;
-        padding: 0 0.5rem;
-    }
-
-    .content-card {
-        width: 100% !important;
-        height: auto;
-        flex-direction: column;
-    }
-
-    .content-card img {
-        width: 100%;
-        height: 200px;
-    }
-
-    .content-card-content {
-        width: 100%;
-        padding: 0.75rem 0.5rem;
-    }
-
-    .content-text {
-        -webkit-line-clamp: 4;
-    }
-}
+        @media (max-width: 576px) {
+            .content-text {
+            -webkit-line-clamp: 4;
+            max-height: calc(1.3em * 4);
+            }
+        }
     </style>
-
-
 </head>
 <body class="bg-light">
 
@@ -78,13 +62,16 @@
     <!-- Quem Somos -->
     <section class="mb-4">
         <h2>Quem Somos</h2>
-        <p>Somos uma comunidade dedicada à prática e promoção do desporto em todas as idades.</p>
+        <p><strong>Vivemos e respiramos desporto em todas as suas formas.</strong>
+            Trazemos-te notícias atuais, artigos profundos e partilhas autênticas sobre todas as modalidades, dos grandes palcos aos recantos menos conhecidos.
+            Aqui, celebramos a paixão dos verdadeiros amantes do desporto, com informação, opinião e emoção.
+            Se o desporto faz parte da tua vida, este é o teu lugar.</p>
     </section>
 
     <!-- Imagens em Destaque -->
     <section class="mb-4">
-        <h2>Imagens em Destaque</h2>
-
+        <h2>Imagens em Destaque</h2><br>
+    
         <?php if (!empty($imagensDestaque)): ?>
             <div class="carousel-container">
                 <?php foreach ($imagensDestaque as $img): ?>
@@ -100,7 +87,7 @@
 
     <!-- Últimas Notícias -->
     <section class="mb-4">
-        <h2>Últimas Notícias</h2>
+        <h2>Últimas Notícias</h2><br>
 
         <?php if (!empty($noticias)): ?>
             <div class="cards-container">
@@ -121,7 +108,7 @@
 
     <!-- Últimos Artigos -->
     <section class="mb-4">
-        <h2>Últimos Artigos</h2>
+        <h2>Últimos Artigos</h2><br>
 
         <?php if (!empty($artigos)): ?>
             <div class="cards-container">
@@ -144,7 +131,5 @@
     </section>
 
 </div>
-
-<?php include '../includes/footer.php'; ?>
 </body>
 </html>

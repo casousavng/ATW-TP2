@@ -25,15 +25,12 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="keywords" content="artigos, utilizador, comunidade desportiva" />
     <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
     <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon" />
-    <title>Meus Artigos</title>
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-
-    <link rel="stylesheet" href="../assets/css/style_header.css" />
+    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <title>Meus Artigos</title>
 </head>
 <body>
 <div class="container mt-4">

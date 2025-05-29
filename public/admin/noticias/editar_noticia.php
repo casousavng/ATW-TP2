@@ -71,7 +71,7 @@ if (isset($_GET['id'])) {
 <body class="bg-light">
 
 <div class="container py-4">
-    <a href="add_noticia.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+    <a href="add_noticia.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
 
     <h2>Editar Notícia</h2>
 

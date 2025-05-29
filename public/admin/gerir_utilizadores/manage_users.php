@@ -33,7 +33,7 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </header>
 
     <div class="container mt-5">
-        <a href="dashboard.php" class="btn btn-secondary mb-4">← Voltar ao Painel</a>
+        <a href="dashboard.php" class="btn btn-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar ao Painel</a>
 
         <table class="table table-bordered">
             <thead>

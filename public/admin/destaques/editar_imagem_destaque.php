@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['imagem'])) {
                 break;
             }
         } else {
-            $erro = "Erro no upload da imagem {$index}.";
+            $erro = "Erro no upload da(s) imagem(ns), tamanho ou formato não suportado.";
             break;
         }
     }

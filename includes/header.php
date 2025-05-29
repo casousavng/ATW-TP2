@@ -26,14 +26,15 @@
 
 </head>
 
-
-
 <body>
 
 <!-- Header Responsivo -->
 <nav class="navbar navbar-expand-lg navbar-custom">
     <div class="container-fluid">
-        <a class="navbar-brand" href="../public/index.php">Comunidade Desportiva</a>
+        <a class="navbar-brand" href="../public/index.php">
+            <img src="../assets/favicon/favicon.jpg" width="30" height="30" class="d-inline-block align-top" alt="">
+            Comunidade Desportiva
+        </a>
         <button class="navbar-toggler text-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -48,9 +49,21 @@
                 <li class="nav-item">
                     <a class="nav-link" href="../public/documentos.php">Documentos</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="../public/login.php">Entrar</a>
-                </li>
+
+                <?php if (isset($_SESSION['user'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= $_SESSION['is_admin'] ? '../public/admin/index.php' : '../public/user/index.php' ?>">
+                            Área Pessoal
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:rgb(235, 40, 59) !important;" href="../public/logout.php">SAIR</a>
+                    </li>
+                <?php else: ?>
+                    <li class="nav-item">
+                        <a class="nav-link" style="color:rgb(25, 135, 51) !important;" href="../public/login.php">ENTRAR</a>
+                    </li>
+                <?php endif; ?>
             </ul>
         </div>
     </div>

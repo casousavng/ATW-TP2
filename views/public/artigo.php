@@ -1,10 +1,5 @@
-<?php
-// views/public/artigo_view.php (VIEW)
-// Recebe as variáveis: $article, $comments, $errors, $name, $email, $comment
-?>
-
 <div class="container mt-1">
-    <a href="artigos.php" class="btn btn-outline-secondary mb-4">← Voltar aos artigos</a>
+    <a href="<?php echo htmlspecialchars($voltar_para); ?>" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
 
     <h1><?= htmlspecialchars($article['title']) ?></h1>
     <p class="text-muted">Por <?= htmlspecialchars($article['author']) ?> em <?= date('d/m/Y', strtotime($article['created_at'])) ?></p>
@@ -16,6 +11,12 @@
     <div><?= nl2br(htmlspecialchars($article['content'])) ?></div>
 
     <hr>
+
+    <?php if (isset($_GET['pending'])): ?>
+        <div class="alert alert-info">
+            Comentário enviado! Por favor verifica o teu email para confirmar.
+        </div>
+    <?php endif; ?>
 
     <h3>Comentários (<?= count($comments) ?>)</h3>
 
@@ -30,7 +31,7 @@
             <?php endforeach; ?>
         </ul>
     <?php else: ?>
-        <p class="text-muted">Seja o primeiro a comentar!</p>
+        <p class="text-muted">Nenhum comentário confirmado ainda.</p>
     <?php endif; ?>
 
     <h4>Adicionar comentário</h4>

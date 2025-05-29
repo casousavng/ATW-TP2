@@ -1,7 +1,8 @@
 <?php
-// public/login.php (CONTROLLER)
 
 session_start();
+
+// public/login.php (CONTROLLER)
 require_once '../includes/db.php';
 require_once '../includes/mailer.php';
 
@@ -52,18 +53,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $errors[] = "Erro ao reenviar o email de verificação. Tenta mais tarde.";
                 }
             } else {
-                // Gera código de 6 dígitos (texto simples)
+                // ✅ Verifica se o cookie de 2FA está presente e válido
+                $cookie_name = 'remember_2fa';
+                $user_hash = hash('sha256', $user['id'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
+
+                if (isset($_COOKIE[$cookie_name]) && $_COOKIE[$cookie_name] === $user_hash) {
+                    // Logar direto (cookie válido)
+                    $_SESSION['user_id'] = $user['id'];
+                    $_SESSION['user_name'] = $user['name'];
+                    $_SESSION['is_admin'] = $user['is_admin'];
+                    $_SESSION['user'] = $user; // Guarda o utilizador na sessão
+
+                    // Loga atividade
+                    $stmtLog = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
+                    $stmtLog->execute([$user['id'], 'Login efetuado (2FA lembrado por cookie)', 'login']);
+
+                    header("Location: index.php");
+                    exit;
+                }
+
+                // 🔐 Senão, segue para envio de código 2FA
                 $code = random_int(100000, 999999);
                 $expires = date('Y-m-d H:i:s', time() + 300); // expira em 5 minutos
 
-                // Guarda código simples e validade
                 $stmt = $pdo->prepare("UPDATE users SET login_token = ?, login_token_expires = ? WHERE id = ?");
                 $stmt->execute([strval($code), $expires, $user['id']]);
 
-                // Envia código por email
                 sendVerificationCode($user['email'], $user['name'], $code);
 
-                // Guarda dados temporários na sessão para 2FA
                 $_SESSION['temp_user_id'] = $user['id'];
                 $_SESSION['2fa_user'] = [
                     'id' => $user['id'],

@@ -1,6 +1,7 @@
 <?php
-// public/noticias.php (CONTROLLER)
+session_start();
 
+// public/noticias.php (CONTROLLER)
 require_once '../includes/db.php';
 
 // Verificar se há um parâmetro de pesquisa
@@ -20,6 +21,14 @@ if ($searchQuery) {
 }
 
 $noticias = $stmt->fetchAll();
+
+function getExcerptWithMore($content, $id, $maxSentences = 1) {
+    $text = strip_tags($content);
+    $sentences = preg_split('/(?<=[.?!])\s+/', $text, -1, PREG_SPLIT_NO_EMPTY);
+    $excerpt = implode(' ', array_slice($sentences, 0, $maxSentences));
+
+    return htmlspecialchars($excerpt) . ' (Clica para ler mais) ';
+}
 
 // No final do controller, inclua a view.
 // As variáveis $searchQuery e $noticias estarão disponíveis na view.

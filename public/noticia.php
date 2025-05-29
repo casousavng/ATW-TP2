@@ -1,6 +1,7 @@
 <?php
-// public/noticia.php (CONTROLLER)
+session_start();
 
+// public/noticia.php (CONTROLLER)
 require_once '../includes/db.php';
 
 if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
@@ -21,6 +22,8 @@ $noticia = $stmt->fetch();
 if (!$noticia) {
     die("Notícia não encontrada.");
 }
+
+$voltar_para = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'noticias.php';
 
 // Incluir header, view e footer
 include '../includes/header.php';

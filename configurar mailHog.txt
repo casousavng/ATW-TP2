@@ -1,0 +1,49 @@
+https://github.com/mailhog/MailHog?tab=readme-ov-file
+
+no MAC: brew update && brew install mailhog
+
+✅ Passos para configurar MailHog com PHPMailer
+
+🧰 1. Arrancar o MailHog
+
+Se já tens o MailHog instalado com Brew, podes arrancá-lo com:
+
+brew services start mailhog
+
+Ele normalmente corre no:
+	•	SMTP server: localhost:1025
+	•	Web UI: http://localhost:8025
+
+Confirma que está a correr abrindo http://localhost:8025 no browser.
+
+
+🛠️ 2. Atualizar o configureMailer() para usar o MailHog
+
+Substitui o teu configureMailer() por isto:
+
+function configureMailer(): PHPMailer {
+    $mail = new PHPMailer(true);
+
+    // Configurações SMTP para MailHog
+    $mail->isSMTP();
+    $mail->Host       = 'localhost';
+    $mail->SMTPAuth   = false;           // MailHog não precisa de auth
+    $mail->Port       = 1025;
+
+    $mail->CharSet = 'UTF-8';
+
+    return $mail;
+}
+
+
+📬 3. Testar envio
+
+Agora, qualquer envio de email feito pelas tuas funções (como sendVerificationEmail, sendVerificationCode, etc.) vai aparecer na interface do MailHog em http://localhost:8025.
+
+
+💡 Dica Extra
+
+Se quiseres logs mais verbosos para debugging, ativa isto temporariamente:
+
+$mail->SMTPDebug = 2; // Mostra o output do SMTP no terminal
+

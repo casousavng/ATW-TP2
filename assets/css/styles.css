@@ -1,37 +1,54 @@
-/* Para garantir que a página tenha altura mínima para ocupar toda a tela */
+/* Garante que a página ocupa toda a altura da tela */
 html, body {
     height: 100%;
     margin: 0;
 }
 
-/* Flexbox no corpo para garantir que o conteúdo empurre o footer para o fundo */
+/* Flexbox para empurrar footer para o fundo */
 body {
     display: flex;
     flex-direction: column;
 }
 
-/* Garantir que o conteúdo ocupe o espaço restante */
+/* Conteúdo ocupa o espaço restante */
 .container {
     flex: 1;
 }
 
-/* Estilos para o cabeçalho */
+/* Cabeçalho */
 header {
     margin-bottom: 0;
 }
 
-/* Reduzir o espaçamento entre a navbar e o conteúdo */
+/* Retira o espaçamento entre a navbar e o conteúdo */
 header + .container {
-    margin-top: 0; /* Retira o espaçamento do topo */
+    margin-top: 0;
 }
 
-/* Rodapé fixo no fundo da página */
+/* Rodapé fixo */
 footer {
     background-color: #343a40;
     color: white;
     padding: 1rem;
-    margin-top: auto; /* Faz o footer "empurrar" para o fundo */
+    margin-top: auto;
     width: 100%;
     text-align: center;
 }
 
+/* Layout tipo "masonry" */
+.masonry {
+    column-count: 1;
+}
+
+@media (min-width: 992px) {
+.masonry {
+    column-count: 3;
+
+}
+
+.masonry-item {
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
+}
+}

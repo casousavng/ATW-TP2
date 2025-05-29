@@ -11,17 +11,17 @@
     <?php if (count($artigos) === 0): ?>
         <p class="text-muted">Nenhum artigo encontrado.</p>
     <?php else: ?>
-        <div class="row">
+        <div class="masonry">
             <?php foreach ($artigos as $artigo): ?>
-                <div class="col-md-6 mb-4">
+                <div class="masonry-item mb-4">
                     <a href="artigo.php?id=<?= (int)$artigo['id'] ?>" class="text-decoration-none text-reset">
-                        <div class="card h-100">
+                        <div class="card">
                             <?php if (!empty($artigo['image'])): ?>
                                 <img src="/public<?= htmlspecialchars($artigo['image']) ?>" class="card-img-top" alt="Imagem do artigo">
                             <?php endif; ?>
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($artigo['title']) ?></h5>
-                                <p class="card-text"><?= htmlspecialchars(mb_substr(strip_tags($artigo['content']), 0, 200)) ?>...</p>
+                               <p class="card-text"><?= getExcerptWithMore($artigo['content'], $artigo['id']) ?></p
                                 <p class="text-muted mb-1">
                                     Por <?= htmlspecialchars($artigo['author']) ?> em <?= date('d/m/Y', strtotime($artigo['created_at'])) ?>
                                 </p>

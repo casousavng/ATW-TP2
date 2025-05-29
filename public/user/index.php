@@ -22,7 +22,7 @@ $values_stmt = $pdo->prepare("SELECT * FROM user_extra_values WHERE user_id = ?"
 $values_stmt->execute([$userId]);
 $extra_values_raw = $values_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Organize os valores dos campos extras para fácil acesso
+// Organiza os valores dos campos extras para fácil acesso
 $extra_values = [];
 foreach ($extra_values_raw as $ev) {
     $extra_values[$ev['field_id']] = $ev['value'];
@@ -39,37 +39,11 @@ foreach ($extra_values_raw as $ev) {
     <meta name="author" content="Carlos Sousa, Gabriel Rocha, Miguel Magalhães" />
     <link rel="icon" href="../assets/favicon/favicon.jpg" type="image/x-icon" />
     <link rel="stylesheet" href="../assets/css/styles.css" />
-    <title>Área do Utilizador</title>
-
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
-
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-
-    <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-
-        main.container {
-            flex: 1;
-        }
-
-        footer {
-            background-color: #343a40;
-            color: white;
-            padding: 1rem;
-            margin-top: auto;
-            text-align: center;
-        }
-    </style>
+    <title>Área do Utilizador</title>
 </head>
 <body class="bg-light">
 
@@ -77,8 +51,8 @@ foreach ($extra_values_raw as $ev) {
     <header class="bg-dark text-white py-3 mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="mb-0 fs-3">Área do Utilizador</h1>
-            <a href="../logout.php" class="btn btn-danger">
-                <i class="bi bi-box-arrow-right"></i> Terminar Sessão
+              <a href="../index.php" class="btn btn-success">
+                <i class="bi bi-house-door-fill me-1"></i> Voltar ao Início
             </a>
         </div>
     </header>

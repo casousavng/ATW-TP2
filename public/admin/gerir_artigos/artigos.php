@@ -67,7 +67,7 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 <body class="bg-light">
 <div class="container py-4">
-    <a href="../index.php" class="btn btn-outline-secondary mb-4">← Voltar</a>
+    <a href="../index.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
     <h1>Gestão de Artigos</h1>
 
     <?php if (empty($articles)): ?>

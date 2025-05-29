@@ -64,7 +64,9 @@ checkAdmin(); // Garante que o utilizador é administrador
     <header class="bg-dark text-white py-3 mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <h1 class="mb-0 fs-3">Painel de Administração</h1>
-            <a href="../logout.php" class="btn btn-danger">Terminar Sessão</a>
+            <a href="../index.php" class="btn btn-success">
+                <i class="bi bi-house-door-fill me-1"></i> Voltar ao Início
+            </a>
         </div>
     </header>
 
@@ -137,6 +139,19 @@ checkAdmin(); // Garante que o utilizador é administrador
                         <h5 class="card-title">Gestão de Notícias</h5>
                         <p class="card-text">Cria, edita ou remove notícias partilhadas com a comunidade.</p>
                         <a href="noticias/add_noticia.php" class="btn btn-primary"><i class="bi bi-gear-fill me-1"></i> Gerir</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gestão de Comentários -->
+            <div class="col-12 col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Gestão de Comentários</h5>
+                        <p class="card-text">Vê todos os comentários feitos nos artigos, com opções para verificar ou remover.</p>
+                        <a href="gerir_artigos/gestao_comentarios.php" class="btn btn-primary">
+                            <i class="bi bi-chat-dots me-1"></i> Ver Comentários
+                        </a>
                     </div>
                 </div>
             </div>

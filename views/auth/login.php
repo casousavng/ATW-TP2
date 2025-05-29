@@ -1,6 +1,5 @@
 <?php
 // views/auth/login.php (VIEW)
-
 // Não há lógica de processamento de formulário ou DB aqui.
 // Apenas exibe o HTML e variáveis que já foram preparadas pelo controller.
 ?>
@@ -28,7 +27,7 @@
 
     
     <p class="mt-3">
-        Ainda não tens conta? <a href="register.php">Regista-te aqui</a><br>
+        Ainda não tens conta? <a href="registo.php">Regista-te aqui</a><br>
         Esquecestes-te a tua senha? <a href="../../public/recuperar_senha.php">Recuperar senha</a>
     </p>
 </main>

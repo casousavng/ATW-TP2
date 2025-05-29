@@ -1,148 +1,157 @@
+/* Reset para os parágrafos */
+p {
+    margin: 0;
+    padding: 0;
+    text-align: left; /* alinhado à esquerda, não justificado */
+    line-height: 1.3;
+    font-size: 1rem;
+}
 
-        p {
-            margin: 0;
-            padding: 0;
-            text-align: justify;
-            line-height: 1.3;
-            font-size: 1rem;
+/* CARROSSEL */
+.carousel-container {
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    height: 400px;
+    margin: 0 auto 2rem auto;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
 
-        }
-        
-        
-        /* CARROSSEL */
-        .carousel-container {
-            position: relative;
-            width: 100%;
-            max-width: 900px; /* largura máxima do carrossel */
-            height: 400px; /* altura fixa */
-            margin: 0 auto 2rem auto;
-            overflow: hidden;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0,0,0,0.15);
-        }
+@keyframes fadeSlide {
+    0% { opacity: 0; }
+    10% { opacity: 1; }
+    30% { opacity: 1; }
+    40% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+/* CARDS alinhados e tamanho fixo */
+.cards-container {
+    max-width: 100%; /* aumentei para garantir espaço */
+    margin: 0 auto 3rem auto;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.content-card {
+    flex: 1 1 calc(33.333% - 1rem); /* largura responsiva para 3 cards */
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    height: 400px;
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.3s ease;
+}
+
+.content-card:hover,
+.content-card:focus {
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    outline: none;
+}
+
+.content-card img {
+    width: 40%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.content-card-content {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.content-card h5 {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+
+.content-text {
+    flex-grow: 1;
+    overflow: hidden;
+    line-clamp: 6;
+    word-break: break-word;
+    text-align: left; /* Alinhado à esquerda */
+}
+
+.comentarios-count {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: auto;
+}
+
+/* RESPONSIVO */
+@media (max-width: 992px) {
+    .content-card {
+        flex: 1 1 calc(50% - 1rem); /* 3 cards por linha */
+        height: 350px;
+    }
+
+    .content-card img {
+        width: 45%;
+        height: 100%;
+    }
+
+    .content-card-content {
+        width: 55%;
+    }
+
+.content-text {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: break-word;
+    text-align: left;
+    line-height: 1.3em;
+    max-height: calc(1.3em * 6); /* evita estourar o card */
+}
+}
+
+@media (max-width: 576px) {
+    .cards-container {
+        max-width: 100%;
+        padding: 0 0.5rem;
+    }
+
+    .content-card {
+        flex: 1 1 100%;
+        height: auto;
+        flex-direction: column;
+    }
+
+    .content-card img {
+        width: 100%;
+        height: 200px;
+    }
+
+    .content-card-content {
+        width: 100%;
+        padding: 0.75rem 0.5rem;
+    }
+
+    .content-text {
+        line-clamp: 4;
+        text-align: left; /* Alinhado à esquerda */
+    }
+}
 
 
-
-        @keyframes fadeSlide {
-            0% {opacity: 0;}
-            10% {opacity: 1;}
-            30% {opacity: 1;}
-            40% {opacity: 0;}
-            100% {opacity: 0;}
-        }
-
-        .carousel-slide img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            border-radius: 10px;
-        }
-
-        /* CARDS alinhados e tamanho fixo, igual ao carrossel */
-
-        .cards-container {
-            max-width: 900px; /* mesmo tamanho do carrossel */
-            margin: 0 auto 3rem auto;
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .content-card {
-            background: white;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            flex-direction: row;
-            overflow: hidden;
-            width: calc(33.333% - 0.66rem); /* 3 cards em linha, com gaps */
-            height: 400px; /* mesma altura do carrossel */
-            text-decoration: none;
-            color: inherit;
-            transition: box-shadow 0.3s ease;
-        }
-
-        .content-card:hover,
-        .content-card:focus {
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
-            outline: none;
-        }
-
-        .content-card img {
-            width: 40%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .content-card-content {
-            padding: 1rem;
-            display: flex;
-            flex-direction: column;
-            width: 60%;
-        }
-
-        .content-card h5 {
-            margin-top: 0;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            font-size: 1.25rem;
-        }
-
-        .content-text {
-            flex-grow: 1;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 6;
-            -webkit-box-orient: vertical;
-            line-clamp: 6;
-            word-break: break-word;
-        }
-
-        .comentarios-count {
-            font-size: 0.9rem;
-            color: #666;
-            margin-top: auto;
-        }
-
-        /* RESPONSIVO */
-
-        @media (max-width: 992px) {
-            .content-card {
-                width: calc(50% - 0.5rem); /* 2 cards por linha */
-                height: 350px;
-            }
-            .content-card img {
-                width: 45%;
-                height: 100%;
-            }
-            .content-card-content {
-                width: 55%;
-            }
-            .content-text {
-                -webkit-line-clamp: 5;
-            }
-        }
-
-        @media (max-width: 576px) {
-            .cards-container {
-                max-width: 100%;
-                padding: 0 0.5rem;
-            }
-            .content-card {
-                width: 100% !important;
-                height: auto;
-                flex-direction: column;
-            }
-            .content-card img {
-                width: 100%;
-                height: 200px;
-            }
-            .content-card-content {
-                width: 100%;
-                padding: 0.75rem 0.5rem;
-            }
-            .content-text {
-                -webkit-line-clamp: 4;
-            }
-        }

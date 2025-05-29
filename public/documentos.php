@@ -1,4 +1,6 @@
 <?php
+
+session_start();
 // public/documentos.php (CONTROLLER)
 
 require_once("../includes/db.php"); // Liga à base de dados

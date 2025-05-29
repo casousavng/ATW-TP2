@@ -1,6 +1,7 @@
 <?php
-// public/register.php (CONTROLLER) <--- Este é o controller
+session_start();
 
+// public/registo.php (CONTROLLER) 
 require_once '../includes/db.php';
 require_once '../includes/mailer.php';
 require_once '../includes/telegram_bot.php';
@@ -54,5 +55,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // As variáveis como $errors estarão disponíveis na view.
 // Já está correto!
 include '../includes/header.php'; // Se tiver um header comum
-include '../views/auth/register.php'; // A view específica do registo
+include '../views/auth/registo.php'; // A view específica do registo
 include '../includes/footer.php'; // Se tiver um footer comum

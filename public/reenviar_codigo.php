@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// public/reenviar_codigo.php (CONTROLLER)
 require_once '../includes/db.php';
 require_once '../includes/mailer.php';
 

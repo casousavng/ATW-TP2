@@ -1,4 +1,7 @@
 <?php
+session_start();
+
+// public/reset_senha.php (CONTROLLER)
 require_once '../includes/db.php';
 
 $token = $_GET['token'] ?? '';
@@ -43,8 +46,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // No final do controller, inclua a view.
 // As variáveis $searchQuery e $noticias estarão disponíveis na view.
-include '../includes/header.php'; // Se tiver um header comum
+include '../includes/header.php'; 
 include '../views/auth/redefinir_senha.php'; // A view específica da listagem de notícias
-include '../includes/footer.php'; // Se tiver um footer comum
+include '../includes/footer.php'; 
 
 ?>

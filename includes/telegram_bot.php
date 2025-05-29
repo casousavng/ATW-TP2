@@ -1,8 +1,12 @@
 <?php
+
+require_once __DIR__ . '/env_loader.php';
+loadEnv(__DIR__ . '/../.env');
+
 function notificarNovoUtilizador($nome, $email) {
-    
-    $token = '7636402519:AAEOSCZSl_F1SZAEe7rZfsJF8diiZgRO9p8'; // ← Token do teu bot
-    $chat_id = '5390134101'; // ← CHAT_ID do teu bot
+
+    $token = getenv('BOT_TOKEN');
+    $chat_id = getenv('CHAT_ID');
 
     $mensagem = "🚨 Novo utilizador registado!\n"
               . "👤 Nome: $nome\n"

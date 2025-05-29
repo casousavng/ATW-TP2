@@ -1,26 +1,23 @@
 .navbar-custom {
     background-color: #343a40; /* cinza escuro */
 }
-.navbar-custom .nav-link, .navbar-custom .navbar-brand {
-    color: #f8f9fa !important;;
+
+.navbar-custom .nav-link,
+.navbar-custom .navbar-brand {
+    color: #f8f9fa !important;
 }
+
 .navbar-custom .nav-link:hover {
     color: #ced4da;
 }
 
-.navbar-custom {
-  background-color: #343a40;
-}
-
 .navbar-custom .navbar-toggler {
-  border: 1px solid white; /* Borda branca ao redor do botão */
+    border: 1px solid white; /* Borda branca ao redor do botão */
 }
 
 .navbar-custom .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22' /%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='white' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22' /%3E%3C/svg%3E");
 }
-
-
 
 .search-box {
     display: none;
@@ -30,39 +27,35 @@ body {
     overflow-x: hidden;
 }
 
-    .scrolling-cards {
-        display: flex;
-        gap: 1rem;
-        overflow-x: auto;
-        padding-bottom: 1rem;
-        scroll-snap-type: x mandatory;
+/* Scrolling cards */
+.scrolling-cards {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+}
+
+.scrolling-cards .card {
+    flex: 0 0 auto;
+    min-width: 250px;
+    max-width: 250px;
+    scroll-snap-align: start;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.scrolling-cards img {
+    height: 150px;
+    object-fit: cover;
+}
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 1.4rem;
     }
 
-    .scrolling-cards .card {
-        flex: 0 0 auto;
-        min-width: 250px;
-        max-width: 250px;
-        scroll-snap-align: start;
-        border-radius: 0.5rem;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    .lead {
+        font-size: 1rem;
     }
-
-    .scrolling-cards img {
-        height: 150px;
-        object-fit: cover;
-    }
-
-    /* Evita scroll lateral na página */
-    body {
-        overflow-x: hidden;
-    }
-
-    @media (max-width: 576px) {
-        h2 {
-            font-size: 1.4rem;
-        }
-
-        .lead {
-            font-size: 1rem;
-        }
-    }
+}

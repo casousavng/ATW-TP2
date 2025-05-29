@@ -3,23 +3,42 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . '/../public/vendor/autoload.php';
+require_once __DIR__ . '/../includes/env_loader.php';
+loadEnv(__DIR__ . '/../.env');
 
+
+// Configuração do MailHog para testes
 function configureMailer(): PHPMailer {
     $mail = new PHPMailer(true);
 
-    // Configurações SMTP
+    // Configurações SMTP para MailHog
     $mail->isSMTP();
-    $mail->Host       = 'sandbox.smtp.mailtrap.io';
-    $mail->SMTPAuth   = true;
-    $mail->Username   = '9e3bc57eccee90';
-    $mail->Password   = 'b3633bc59c5163';
-    $mail->Port       = 2525;
-
-    // ⚠️ Codificação UTF-8 para suportar acentos
+    $mail->Host       = 'localhost';
+    $mail->SMTPAuth   = false;           // MailHog não precisa de auth
+    $mail->Port       = 1025;
     $mail->CharSet = 'UTF-8';
 
     return $mail;
 }
+
+/*
+// configuração do Mailtrap (exemplo)
+function configureMailer(): PHPMailer {
+    $mail = new PHPMailer(true);
+
+    $mail->isSMTP();
+    $mail->Host       = getenv('MAIL_HOST');
+    $mail->SMTPAuth   = true;
+    $mail->Username   = getenv('MAIL_USER');
+    $mail->Password   = getenv('MAIL_PASS');
+    $mail->Port       = getenv('MAIL_PORT');
+    $mail->CharSet    = 'UTF-8';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+
+    return $mail;
+}
+}
+*/
 
 function sendEmail($toEmail, $toName, $subject, $htmlBody, $fromName = 'Sistema', $fromEmail = 'no-reply@comunidadedesportiva.com') {
     try {
@@ -38,7 +57,9 @@ function sendEmail($toEmail, $toName, $subject, $htmlBody, $fromName = 'Sistema'
 }
 
 function sendVerificationEmail($email, $name, $token) {
-    $verificationLink = "http://localhost:3000/includes/account_verify.php?token=" . urlencode($token);
+
+    $verificationLink = getBaseUrl() . "/includes/verificar_conta.php?token=" . urlencode($token);
+    //$verificationLink = "http://localhost:3000/includes/verificar_conta.php?token=" . urlencode($token);
 
     $body = "
         Se bem-vindo a nossa comunidade, <strong>$name</strong>.<br><br>
@@ -64,7 +85,9 @@ function sendVerificationCode($email, $name, $code) {
 }
 
 function sendPasswordResetEmail($email, $name, $token) {
-    $link = "http://localhost:3000/public/reset_senha.php?token=" . urlencode($token);
+
+    $link = getBaseUrl() . "/public/reset_senha.php?token=" . urlencode($token);
+    //$link = "http://localhost:3000/public/reset_senha.php?token=" . urlencode($token);
 
     $body = "
         <p>Olá <strong>" . htmlspecialchars($name) . "</strong>,</p>
@@ -75,6 +98,27 @@ function sendPasswordResetEmail($email, $name, $token) {
     ";
 
     return sendEmail($email, $name, 'Recuperação de Senha', $body, 'Suporte Comunidade');
+}
+
+function sendCommentVerificationEmail($email, $name, $token) {
+
+    $link = getBaseUrl() . "/includes/verificar_comentario.php?token=" . urlencode($token);
+    //$link = "http://localhost:3000/includes/verificar_comentario.php?token=" . urlencode($token);
+
+    $body = "
+        Olá <strong>$name</strong>,<br><br>
+        Recebemos o teu comentário. Para que ele seja publicado, por favor confirma clicando no link abaixo:<br><br>
+        <a href='$link'>$link</a><br><br>
+        Obrigado por participares!
+    ";
+
+    return sendEmail($email, $name, 'Confirmação de Comentário', $body, 'Moderação de Comentários');
+}
+
+function getBaseUrl() {
+    $host = $_SERVER['HTTP_HOST'] ?? 'localhost:3000';
+    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
+    return $protocol . '://' . $host;
 }
 
 ?>
