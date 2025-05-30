@@ -1,9 +1,10 @@
-const CACHE_NAME = "static-v1";
+const CACHE_NAME = "static-v2";
 const ASSETS = [
-  "/index.php",
-  "/css/style.css",
-  "/js/app.js",
-  // adiciona outras dependências se necessário
+  "index.php",
+  "../assets/css/styles.css",
+  "../assets/css/style_header.css",
+  "../assets/favicon/favicon.jpg"
+  // adiciona outros ficheiros usados na navegação
 ];
 
 self.addEventListener("install", e => {

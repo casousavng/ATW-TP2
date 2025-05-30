@@ -3,42 +3,27 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require __DIR__ . '/../public/vendor/autoload.php';
-require_once __DIR__ . '/../includes/env_loader.php';
-loadEnv(__DIR__ . '/../.env');
 
-
-// Configuração do MailHog para testes
-function configureMailer(): PHPMailer {
-    $mail = new PHPMailer(true);
-
-    // Configurações SMTP para MailHog
-    $mail->isSMTP();
-    $mail->Host       = 'localhost';
-    $mail->SMTPAuth   = false;           // MailHog não precisa de auth
-    $mail->Port       = 1025;
-    $mail->CharSet = 'UTF-8';
-
-    return $mail;
-}
-
-/*
 // configuração do Mailtrap (exemplo)
 function configureMailer(): PHPMailer {
-    $mail = new PHPMailer(true);
+    $phpmailer = new PHPMailer();
 
-    $mail->isSMTP();
-    $mail->Host       = getenv('MAIL_HOST');
-    $mail->SMTPAuth   = true;
-    $mail->Username   = getenv('MAIL_USER');
-    $mail->Password   = getenv('MAIL_PASS');
-    $mail->Port       = getenv('MAIL_PORT');
-    $mail->CharSet    = 'UTF-8';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+    //MAIL_HOST=sandbox.smtp.mailtrap.io
+    //MAIL_USER=9e3bc57eccee90
+    //MAIL_PASS=b3633bc59c5163
+    //MAIL_PORT=2525
 
-    return $mail;
+    $phpmailer->isSMTP();
+    $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
+    $phpmailer->SMTPAuth = true;
+    $phpmailer->Port = 2525;
+    $phpmailer->Username = '9e3bc57eccee90';
+    $phpmailer->Password = 'b3633bc59c5163';
+    $phpmailer->CharSet    = 'UTF-8';
+
+
+    return $phpmailer;
 }
-}
-*/
 
 function sendEmail($toEmail, $toName, $subject, $htmlBody, $fromName = 'Sistema', $fromEmail = 'no-reply@comunidadedesportiva.com') {
     try {
@@ -135,10 +120,8 @@ function enviarDenunciaComentario($adminEmail, $comment, $reporterName, $reporte
     ";
 
     // Parâmetros: toEmail, toName, subject, htmlBody
-    return sendEmail($adminEmail, 'Admin', $subject, $body);
+    return sendEmail('admin@comunidadedesportiva.com', 'Admin', $subject, $body);
 }
-
-
 
 
 function getBaseUrl() {
@@ -146,7 +129,5 @@ function getBaseUrl() {
     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? "https" : "http";
     return $protocol . '://' . $host;
 }
-
-
 
 ?>

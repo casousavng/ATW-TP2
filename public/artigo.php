@@ -23,13 +23,24 @@ if (!$article) {
 }
 
 $errors = [];
-$name = '';
-$email = '';
 $comment = '';
 
+// Preencher nome e email se o utilizador estiver autenticado
+if (isset($_SESSION['user'])) {
+    $name = $_SESSION['user']['name'];
+    $email = $_SESSION['user']['email'];
+} else {
+    $name = '';
+    $email = '';
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
-    $name = trim($_POST['name'] ?? '');
-    $email = trim($_POST['email'] ?? '');
+    // Apenas aceitar dados do form se não estiver autenticado
+    if (!isset($_SESSION['user'])) {
+        $name = trim($_POST['name'] ?? '');
+        $email = trim($_POST['email'] ?? '');
+    }
+
     $comment = trim($_POST['comment'] ?? '');
 
     if (empty($name)) $errors[] = "O nome é obrigatório.";
@@ -41,22 +52,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_comment'])) {
     }
 
     if (empty($errors)) {
-        $token = bin2hex(random_bytes(32));
+        // Verificar se precisa de verificação de email
+        $isVerified = isset($_SESSION['user']) ? 1 : 0;
+        $token = $isVerified ? null : bin2hex(random_bytes(32));
 
         $stmt = $pdo->prepare("
             INSERT INTO comments (article_id, name, email, comment, token, is_verified) 
-            VALUES (?, ?, ?, ?, ?, 0)
+            VALUES (?, ?, ?, ?, ?, ?)
         ");
-        $stmt->execute([$articleId, $name, $email, $comment, $token]);
+        $stmt->execute([$articleId, $name, $email, $comment, $token, $isVerified]);
 
-        sendCommentVerificationEmail(
-            $email,
-            $name,
-            $token
-        );
-
-        header("Location: artigo.php?id=$articleId&pending=1");
-        exit;
+        // Enviar email só se não estiver autenticado
+        if (!$isVerified) {
+            sendCommentVerificationEmail($email, $name, $token);
+            header("Location: artigo.php?id=$articleId&pending=1");
+            exit;
+        } else {
+            header("Location: artigo.php?id=$articleId");
+            exit;
+        }
     }
 }
 

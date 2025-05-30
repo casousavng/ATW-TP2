@@ -111,9 +111,12 @@ CREATE TABLE IF NOT EXISTS password_resets (
 
 CREATE TABLE IF NOT EXISTS login_attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255),
-    ip_address VARCHAR(45),
-    attempt_time DATETIME
+    email VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    attempt_time DATETIME NOT NULL,
+    INDEX (email),
+    INDEX (ip_address),
+    INDEX (attempt_time)
 );
 
 CREATE TABLE IF NOT EXISTS login_logs (
@@ -135,6 +138,8 @@ CREATE TABLE IF NOT EXISTS comments (
     verification_token VARCHAR(64) DEFAULT NULL,
     token VARCHAR(64),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    resolvido BOOLEAN DEFAULT FALSE,
+    denunciado TINYINT(1) NOT NULL DEFAULT 0 AFTER resolvido,
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 

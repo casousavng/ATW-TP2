@@ -116,9 +116,12 @@ CREATE TABLE password_resets (
 -- Tabela de tentativas de login
 CREATE TABLE login_attempts (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255),
-    ip_address VARCHAR(45),
-    attempt_time DATETIME
+    email VARCHAR(255) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    attempt_time DATETIME NOT NULL,
+    INDEX (email),
+    INDEX (ip_address),
+    INDEX (attempt_time)
 );
 
 -- tabela de logs de login
@@ -142,8 +145,12 @@ CREATE TABLE comments (
     verification_token VARCHAR(64) DEFAULT NULL,
     token VARCHAR(64),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    resolvido BOOLEAN DEFAULT FALSE,
+    denunciado TINYINT(1) NOT NULL DEFAULT 0,
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
+
+ALTER TABLE comments ADD COLUMN denunciado TINYINT(1) NOT NULL DEFAULT 0 AFTER resolvido;
 
 -- Atualização de dados para o admin (ajuste pós-criação)
 UPDATE users 

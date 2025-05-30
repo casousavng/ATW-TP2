@@ -1,14 +1,21 @@
 <?php
 // Conexão com a base de dados InfinityFree
 
-$env = parse_ini_file(__DIR__ . '/../.env');
-
 try {
-    $host     = $env['IF_DB_HOST'];
-    $port     = $env['IF_DB_PORT'];
-    $dbname   = $env['IF_DB_NAME'];
-    $user     = $env['IF_DB_USER'];
-    $password = $env['IF_DB_PASSWORD'];
+
+    // conta andresneakersousa
+    //$host     = 'sql106.infinityfree.com';
+    //$port     = '3306';
+    //$dbname   = 'if0_39105337_atw';
+    //$user     = 'if0_39105337';
+    //$password = 'IAMYwy0pmxPks';
+
+    // conta ispg2022105675
+    $host     = 'sql211.infinityfree.com';
+    $port     = '3306';
+    $dbname   = 'if0_39035297_defaultdb';
+    $user     = 'if0_39035297';
+    $password = 'pNdRGSmqY5S';
 
     $connStr = "mysql:host=$host;port=$port;dbname=$dbname;charset=utf8mb4";
 

@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 // public/login.php (CONTROLLER)
@@ -17,28 +16,34 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $errors[] = "Preenche todos os campos.";
     } else {
         // Proteção brute-force
-        $time_window = date('Y-m-d H:i:s', time() - 600); // últimos 10 minutos
-        $stmt = $pdo->prepare("SELECT COUNT(*) FROM login_attempts WHERE email = ? AND ip_address = ? AND attempt_time > ?");
-        $stmt->execute([$email, $ip, $time_window]);
+        $stmt = $pdo->prepare("
+            SELECT COUNT(*) 
+            FROM login_attempts 
+            WHERE email = ? 
+              AND ip_address = ? 
+              AND attempt_time > (NOW() - INTERVAL 10 MINUTE)
+        ");
+        $stmt->execute([$email, $ip]);
         $attempts = $stmt->fetchColumn();
 
         if ($attempts >= 5) {
             $errors[] = "Demasiadas tentativas falhadas. Tenta novamente daqui a 10 minutos.";
         } else {
+            // Tenta encontrar o utilizador
             $stmt = $pdo->prepare("SELECT * FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             $isPasswordCorrect = $user && password_verify($password, $user['password']);
 
-            // Logging da tentativa
-            $stmt = $pdo->prepare("INSERT INTO login_logs (user_id, email, ip_address, status) VALUES (?, ?, ?, ?)");
-            $stmt->execute([$user['id'] ?? null, $email, $ip, $isPasswordCorrect ? 'success' : 'fail']);
-
+            // 👉 Regista tentativa falhada se as credenciais forem inválidas
             if (!$isPasswordCorrect) {
-                // Regista tentativa falhada
                 $stmt = $pdo->prepare("INSERT INTO login_attempts (email, ip_address, attempt_time) VALUES (?, ?, NOW())");
                 $stmt->execute([$email, $ip]);
+
+                // Log da tentativa falhada
+                $stmt = $pdo->prepare("INSERT INTO login_logs (user_id, email, ip_address, status) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$user['id'] ?? null, $email, $ip, 'fail']);
 
                 $errors[] = "Credenciais inválidas.";
             } elseif (!$user['is_verified']) {
@@ -58,11 +63,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $user_hash = hash('sha256', $user['id'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
 
                 if (isset($_COOKIE[$cookie_name]) && $_COOKIE[$cookie_name] === $user_hash) {
-                    // Logar direto (cookie válido)
                     $_SESSION['user_id'] = $user['id'];
                     $_SESSION['user_name'] = $user['name'];
                     $_SESSION['is_admin'] = $user['is_admin'];
-                    $_SESSION['user'] = $user; // Guarda o utilizador na sessão
+                    $_SESSION['user'] = $user;
 
                     // Loga atividade
                     $stmtLog = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
@@ -74,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // 🔐 Senão, segue para envio de código 2FA
                 $code = random_int(100000, 999999);
-                $expires = date('Y-m-d H:i:s', time() + 300); // expira em 5 minutos
+                $expires = date('Y-m-d H:i:s', time() + 300);
 
                 $stmt = $pdo->prepare("UPDATE users SET login_token = ?, login_token_expires = ? WHERE id = ?");
                 $stmt->execute([strval($code), $expires, $user['id']]);
@@ -87,6 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'name' => $user['name'],
                     'is_admin' => $user['is_admin']
                 ];
+
+                // Log de sucesso
+                $stmt = $pdo->prepare("INSERT INTO login_logs (user_id, email, ip_address, status) VALUES (?, ?, ?, ?)");
+                $stmt->execute([$user['id'], $email, $ip, 'success']);
 
                 header("Location: 2fa.php");
                 exit;
