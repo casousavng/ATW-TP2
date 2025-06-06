@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 // public/index.php (CONTROLLER)
 

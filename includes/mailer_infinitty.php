@@ -17,8 +17,8 @@ function configureMailer(): PHPMailer {
     $phpmailer->Host = 'sandbox.smtp.mailtrap.io';
     $phpmailer->SMTPAuth = true;
     $phpmailer->Port = 2525;
-    $phpmailer->Username = '9e3bc57eccee90';
-    $phpmailer->Password = 'b3633bc59c5163';
+    $phpmailer->Username = '875d3a89c90310';
+    $phpmailer->Password = '7d59a80746730b';
     $phpmailer->CharSet    = 'UTF-8';
 
 

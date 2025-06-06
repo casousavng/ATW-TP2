@@ -1,4 +1,4 @@
-const CACHE_NAME = "static-v2";
+const CACHE_NAME = "static-v6";
 const ASSETS = [
   "index.php",
   "../assets/css/styles.css",
@@ -15,6 +15,7 @@ self.addEventListener("install", e => {
   );
 });
 
+/*
 self.addEventListener("fetch", e => {
   e.respondWith(
     caches.match(e.request).then(response => {
@@ -22,6 +23,7 @@ self.addEventListener("fetch", e => {
     })
   );
 });
+*/
 
 self.addEventListener("activate", e => {
   e.waitUntil(
