@@ -1,10 +1,9 @@
-const CACHE_NAME = "static-v6";
+const CACHE_NAME = "static-v7";
 const ASSETS = [
   "index.php",
   "../assets/css/styles.css",
   "../assets/css/style_header.css",
   "../assets/favicon/favicon.jpg"
-  // adiciona outros ficheiros usados na navegação
 ];
 
 self.addEventListener("install", e => {
@@ -15,6 +14,7 @@ self.addEventListener("install", e => {
   );
 });
 
+// comentado para evitar problemas com a cache
 /*
 self.addEventListener("fetch", e => {
   e.respondWith(

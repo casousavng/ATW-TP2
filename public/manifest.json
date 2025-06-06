@@ -1,6 +1,6 @@
 {
   "name": "Projeto ATW",
-  "short_name": "ATW",
+  "short_name": "Comunidade Desportiva",
   "start_url": "/public/index.php",
   "display": "standalone",
   "background_color": "#ffffff",
