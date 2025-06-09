@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erro = "Erro ao enviar email. Por favor, tenta novamente mais tarde.";
             }
         } else {
-            $erro = "Se o teu email constar na nossa base de dados, irás receber um email com instruções.";
+            $mensagem = "Se o teu email constar na nossa base de dados, irás receber um email com instruções.";
         }
     } else {
         $erro = "Por favor, informa um email válido.";

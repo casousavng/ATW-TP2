@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtLog = $pdo->prepare("INSERT INTO atividades (user_id, descricao, tipo_atividade) VALUES (?, ?, ?)");
                 $stmtLog->execute([$user['id'], 'Login efetuado (via 2FA)', 'login']);
 
-                // ✅ Define cookie remember_2fa (válido por 30 dias)
+                // ✅ Define cookie remember_2fa (válido por 30 minutos)
                 $cookie_name = 'remember_2fa';
                 $cookie_value = hash('sha256', $user['id'] . $_SERVER['REMOTE_ADDR'] . $_SERVER['HTTP_USER_AGENT']);
                 //setcookie($cookie_name, $cookie_value, time() + (30 * 60), "/", "", true, true);// Secure + HttpOnly
