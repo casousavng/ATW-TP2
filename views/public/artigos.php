@@ -1,8 +1,3 @@
-<?php
-// views/public/artigos.php (VIEW)
-// Recebe as variáveis $artigos e $searchQuery do controller.
-?>
-
 <div class="container mt-1">
     <form action="artigos.php" method="get" class="mb-4">
         <input type="text" name="q" class="form-control" placeholder="Pesquisar artigos..." value="<?= htmlspecialchars($searchQuery) ?>">

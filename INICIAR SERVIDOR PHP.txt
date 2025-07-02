@@ -1,0 +1,5 @@
+iniciar servidor php
+
+Clicar com o lado direito na pasta e acionar o Abrir Terminal na Pasta, depois:
+
+php -S 127.0.0.1:8000

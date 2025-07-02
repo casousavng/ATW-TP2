@@ -1,10 +1,3 @@
-<?php
-// views/auth/registo.php (VIEW)
-
-// Não há lógica de processamento de formulário ou DB aqui.
-// Apenas exibe o HTML e variáveis que já foram preparadas pelo controller ($errors).
-?>
-
 <main class="container mt-3">
     <h1 class="mb-4">Registo de Utilizador</h1>
     <?php foreach ($errors as $error): ?>

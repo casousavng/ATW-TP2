@@ -1,9 +1,3 @@
-<?php
-// views/public/documentos.php (VIEW)
-// Não há lógica de consulta ao DB ou processamento de requisição aqui.
-// Apenas exibe o HTML e as variáveis que já foram preparadas pelo controller ($searchQuery, $documentos).
-?>
-
 <main class="container mt-1">
     <form action="documentos.php" method="get" class="mb-4">
         <input type="text" name="q" class="form-control" placeholder="Pesquisar documentos..." value="<?= htmlspecialchars($searchQuery) ?>">

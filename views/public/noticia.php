@@ -1,7 +1,3 @@
-<?php
-// views/public/noticia.php (VIEW)
-?>
-
 <main class="container mt-1">
     <a href="<?php echo htmlspecialchars($voltar_para); ?>" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
 

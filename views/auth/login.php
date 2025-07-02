@@ -1,9 +1,3 @@
-<?php
-// views/auth/login.php (VIEW)
-// Não há lógica de processamento de formulário ou DB aqui.
-// Apenas exibe o HTML e variáveis que já foram preparadas pelo controller.
-?>
-
 <main class="container mt-1">
     <h2>Iniciar Sessão</h2>
 
