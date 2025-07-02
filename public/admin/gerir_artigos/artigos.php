@@ -34,6 +34,20 @@ $stmt = $pdo->query("
     ORDER BY a.created_at DESC
 ");
 $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Filtro de pesquisa
+if (isset($_GET['q']) && trim($_GET['q']) !== '') {
+    $q = '%' . trim($_GET['q']) . '%';
+    $stmt = $pdo->prepare("
+        SELECT a.*, u.name AS username 
+        FROM articles a 
+        LEFT JOIN users u ON a.user_id = u.id 
+        WHERE a.title LIKE :q OR a.content LIKE :q
+        ORDER BY a.created_at DESC
+    ");
+    $stmt->execute(['q' => $q]);
+    $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -69,6 +83,13 @@ $articles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 <div class="container py-4">
     <a href="../index.php" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
     <h1>Gestão de Artigos</h1>
+
+    <form method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Pesquisar artigos..." value="<?= isset($_GET['q']) ? htmlspecialchars($_GET['q']) : '' ?>">
+            <button class="btn btn-primary" type="submit"><i class="bi bi-search"></i> Pesquisar</button>
+        </div>
+    </form>
 
     <?php if (empty($articles)): ?>
         <div class="alert alert-info">Nenhum artigo encontrado.</div>

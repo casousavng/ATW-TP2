@@ -75,10 +75,11 @@ $imagens = $pdo->query("SELECT id, caminho, atualizado_em FROM imagem_destaque O
 </head>
 <body class="bg-light">
 <div class="container py-4">
-    <a href="../index.php" class="btn btn-outline-secondary mb-4">
+    <a href="../index.php" class="btn btn-outline-secondary mb-3">
         <i class="bi bi-arrow-left"></i> Voltar
     </a>
-    <h2>Imagens em Destaque</h2>
+
+    <br>
 
     <?php if ($sucesso): ?>
         <div class="alert alert-success">Imagens carregadas com sucesso!</div>
@@ -86,6 +87,13 @@ $imagens = $pdo->query("SELECT id, caminho, atualizado_em FROM imagem_destaque O
         <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
     <?php endif; ?>
 
+<!-- Botão toggle -->
+<button id="toggleFormBtn" class="btn btn-success mb-3">
+    <i class="bi bi-plus-circle"></i> Adicionar Novas Imagens
+</button>
+
+<!-- Formulário escondido inicialmente -->
+<div id="uploadForm" style="display: none;">
     <form method="post" enctype="multipart/form-data" class="mb-4">
         <div class="mb-3">
             <label for="imagem" class="form-label">Adicione uma ou várias imagens que irão aparecer na sua página inicial.</label>
@@ -95,6 +103,10 @@ $imagens = $pdo->query("SELECT id, caminho, atualizado_em FROM imagem_destaque O
             <i class="bi bi-upload"></i> Adicionar Imagens
         </button>
     </form>
+    <hr>
+</div>
+
+<div class="mb-4"><h2>Imagens em Destaque</h2>
 
     <div class="row">
         <?php foreach ($imagens as $img): ?>
@@ -156,6 +168,24 @@ $imagens = $pdo->query("SELECT id, caminho, atualizado_em FROM imagem_destaque O
         modalImgName.textContent = imgName;
         confirmBtn.href = "?delete=" + imgId;
     });
+
+        toggleFormBtn.addEventListener('click', () => {
+        const isVisible = uploadForm.style.display === 'block';
+        uploadForm.style.display = isVisible ? 'none' : 'block';
+
+        if (isVisible) {
+            // Formulário está visível, vamos escondê-lo e mudar botão para verde
+            toggleFormBtn.innerHTML = '<i class="bi bi-plus-circle"></i> Adicionar Novas Imagens';
+            toggleFormBtn.classList.remove('btn-danger');
+            toggleFormBtn.classList.add('btn-success');
+        } else {
+            // Formulário está escondido, vamos mostrar e mudar botão para vermelho
+            toggleFormBtn.innerHTML = '<i class="bi bi-x-circle"></i> Fechar Formulário';
+            toggleFormBtn.classList.remove('btn-success');
+            toggleFormBtn.classList.add('btn-danger');
+        }
+    });
 </script>
+
 </body>
 </html>

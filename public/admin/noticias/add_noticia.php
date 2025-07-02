@@ -6,11 +6,13 @@ checkAdmin();
 
 $sucesso = false;
 $erro = '';
+$itensPorPagina = 10; // ← número de notícias por página
+$paginaAtual = isset($_GET['pagina']) && is_numeric($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
+$offset = ($paginaAtual - 1) * $itensPorPagina;
 
-// Exclusão da notícia via POST
+// Exclusão
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $delete_id = (int)$_POST['delete_id'];
-
     $stmt = $pdo->prepare("SELECT imagem FROM noticias WHERE id = ?");
     $stmt->execute([$delete_id]);
     $noticia = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -18,9 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     if ($noticia) {
         if ($noticia['imagem']) {
             $imagemPath = BASE_PATH . '/public/uploads/noticias/' . $noticia['imagem'];
-            if (file_exists($imagemPath)) {
-                unlink($imagemPath);
-            }
+            if (file_exists($imagemPath)) unlink($imagemPath);
         }
 
         $stmt = $pdo->prepare("DELETE FROM noticias WHERE id = ?");
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     }
 }
 
-// Processar o envio do formulário para adicionar notícia
+// Adicionar nova notícia
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
     $titulo = $_POST['titulo'];
     $texto = $_POST['texto'];
@@ -56,7 +56,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && !isset($_POST['delete_id'])) {
     }
 }
 
-$stmt = $pdo->query("SELECT * FROM noticias ORDER BY data_criacao DESC");
+// Lógica de pesquisa
+$pesquisa = '';
+$params = [];
+$queryWhere = '';
+if (isset($_GET['pesquisa']) && trim($_GET['pesquisa']) !== '') {
+    $pesquisa = trim($_GET['pesquisa']);
+    $queryWhere = "WHERE titulo LIKE ? OR texto LIKE ?";
+    $params = ['%' . $pesquisa . '%', '%' . $pesquisa . '%'];
+}
+
+// Total de notícias para paginação
+$countStmt = $pdo->prepare("SELECT COUNT(*) FROM noticias $queryWhere");
+$countStmt->execute($params);
+$totalNoticias = $countStmt->fetchColumn();
+$totalPaginas = ceil($totalNoticias / $itensPorPagina);
+
+// Consulta paginada
+$query = "SELECT * FROM noticias $queryWhere ORDER BY data_criacao DESC LIMIT $itensPorPagina OFFSET $offset";
+$stmt = $pdo->prepare($query);
+$stmt->execute($params);
 $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -82,22 +101,74 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         textarea {
             resize: none;
         }
+        #formNovaNoticia {
+            display: none;
+        }
     </style>
 </head>
 <body class="bg-light">
 <div class="container py-4">
-    <a href="../index.php" class="btn btn-outline-secondary mb-4">
+    <a href="../index.php" class="btn btn-outline-secondary mb-2">
         <i class="bi bi-arrow-left"></i> Voltar
     </a>
+    <br>
+    <button id="btnMostrarFormulario" class="btn btn-success mb-2">
+    <i class="bi bi-plus-circle"></i> Adicionar Nova Notícia
+</button>
+
+    <div id="formNovaNoticia" style="display: none;">
+        
+        <h2>Adicionar Nova Notícia</h2>
+
+        <?php if ($sucesso): ?>
+            <div class="alert alert-success">Notícia adicionada com sucesso!</div>
+        <?php elseif (!empty($erro)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+        <?php endif; ?>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="titulo" class="form-label">Título:</label>
+                <input type="text" name="titulo" id="titulo" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="imagem" class="form-label">Imagem:</label>
+                <input type="file" name="imagem" id="imagem" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="texto" class="form-label">Texto:</label>
+                <textarea name="texto" id="texto" class="form-control" rows="5" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> Adicionar Notícia
+            </button>
+            <button type="reset" class="btn btn-secondary">
+                <i class="bi bi-x-circle"></i> Limpar Campos
+            </button>
+        </form>
+        <hr>
+    </div>
 
     <h2 class="mt-1">Todas as Notícias</h2>
+    <form method="get" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="pesquisa" class="form-control" placeholder="Pesquisar notícias por título, conteúdo ou data de criação..." value="<?= isset($_GET['pesquisa']) ? htmlspecialchars($_GET['pesquisa']) : '' ?>">
+            <button class="btn btn-outline-primary" type="submit">
+                <i class="bi bi-search"></i> Pesquisar
+            </button>
+        </div>
+    </form>
+
     <table class="table table-striped mt-3">
         <thead>
-            <tr>
-                <th>Título</th>
-                <th>Data de Inserção</th>
-                <th>Ações</th>
-            </tr>
+        <tr>
+            <th>Título</th>
+            <th>Data de Inserção</th>
+            <th>Ações</th>
+        </tr>
         </thead>
         <tbody>
         <?php if (empty($noticias)): ?>
@@ -139,38 +210,31 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </tbody>
     </table>
 
-    <hr>
-    <h2>Adicionar Nova Notícia</h2>
+    <?php if ($totalPaginas > 1): ?>
+    <nav>
+        <ul class="pagination justify-content-center mt-4">
+            <?php if ($paginaAtual > 1): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=<?= $paginaAtual - 1 ?>&pesquisa=<?= urlencode($pesquisa) ?>">Anterior</a>
+                </li>
+            <?php endif; ?>
 
-    <?php if ($sucesso): ?>
-        <div class="alert alert-success">Notícia adicionada com sucesso!</div>
-    <?php elseif (!empty($erro)): ?>
-        <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
-    <?php endif; ?>
+            <?php for ($i = 1; $i <= $totalPaginas; $i++): ?>
+                <li class="page-item <?= $i === $paginaAtual ? 'active' : '' ?>">
+                    <a class="page-link" href="?pagina=<?= $i ?>&pesquisa=<?= urlencode($pesquisa) ?>"><?= $i ?></a>
+                </li>
+            <?php endfor; ?>
 
-    <form method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label for="titulo" class="form-label">Título:</label>
-            <input type="text" name="titulo" id="titulo" class="form-control" required>
-        </div>
+            <?php if ($paginaAtual < $totalPaginas): ?>
+                <li class="page-item">
+                    <a class="page-link" href="?pagina=<?= $paginaAtual + 1 ?>&pesquisa=<?= urlencode($pesquisa) ?>">Próxima</a>
+                </li>
+            <?php endif; ?>
+        </ul>
+    </nav>
+<?php endif; ?>
 
-        <div class="mb-3">
-            <label for="imagem" class="form-label">Imagem:</label>
-            <input type="file" name="imagem" id="imagem" class="form-control" required>
-        </div>
 
-        <div class="mb-3">
-            <label for="texto" class="form-label">Texto:</label>
-            <textarea name="texto" id="texto" class="form-control" rows="5" required></textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">
-            <i class="bi bi-plus-circle"></i> Adicionar Notícia
-        </button>
-        <button type="reset" class="btn btn-secondary">
-            <i class="bi bi-x-circle"></i> Limpar Campos
-        </button>
-    </form>
 </div>
 
 <!-- Modal de confirmação de exclusão -->
@@ -203,28 +267,52 @@ $noticias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-    var confirmDeleteModal = document.getElementById('confirmDeleteModal');
-    confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget;
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('btnMostrarFormulario');
+        const form = document.getElementById('formNovaNoticia');
 
-        var id = button.getAttribute('data-id');
-        var titulo = button.getAttribute('data-titulo');
-        var texto = button.getAttribute('data-texto');
-        var imagem = button.getAttribute('data-imagem');
-
-        document.getElementById('delete_id').value = id;
-        document.getElementById('modalTitulo').textContent = titulo;
-        document.getElementById('modalTexto').textContent = texto;
-
-        var modalImagem = document.getElementById('modalImagem');
-        if (imagem) {
-            modalImagem.src = "/public/uploads/noticias/" + imagem;
-            modalImagem.style.display = 'block';
-        } else {
-            modalImagem.style.display = 'none';
-            modalImagem.src = '';
+        if (btn && form) {
+            btn.addEventListener('click', function () {
+                if (form.style.display === 'none' || form.style.display === '') {
+                    // Abrir formulário
+                    form.style.display = 'block';
+                    btn.innerHTML = '<i class="bi bi-x-lg me-1"></i> Fechar Formulário';
+                    btn.classList.remove('btn-success');
+                    btn.classList.add('btn-danger');
+                } else {
+                    // Fechar formulário
+                    form.style.display = 'none';
+                    btn.innerHTML = '<i class="bi bi-plus-lg me-1"></i> Adicionar Nova Notícia';
+                    btn.classList.remove('btn-danger');
+                    btn.classList.add('btn-success');
+                }
+            });
         }
+
+        // Modal de confirmação de exclusão
+        var confirmDeleteModal = document.getElementById('confirmDeleteModal');
+        confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+
+            var id = button.getAttribute('data-id');
+            var titulo = button.getAttribute('data-titulo');
+            var texto = button.getAttribute('data-texto');
+            var imagem = button.getAttribute('data-imagem');
+
+            document.getElementById('delete_id').value = id;
+            document.getElementById('modalTitulo').textContent = titulo;
+            document.getElementById('modalTexto').textContent = texto;
+
+            var modalImagem = document.getElementById('modalImagem');
+            if (imagem) {
+                modalImagem.src = "/public/uploads/noticias/" + imagem;
+                modalImagem.style.display = "block";
+            } else {
+                modalImagem.style.display = "none";
+            }
+        });
     });
 </script>
 </body>

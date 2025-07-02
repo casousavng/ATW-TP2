@@ -3,7 +3,7 @@
 <!-- Rodapé -->
 <footer class="mt-5" style="background-color: #343a40; color: white; font-size: 0.9rem;">
     <div class="container d-flex justify-content-center align-items-center text-center" style="min-height: 30px;">
-        <p class="mb-0">Todos os Direitos Reservados, &copy; <?= date('Y') ?> Comunidade Desportiva</p>
+        <p class="mb-0">Todos os Direitos Reservados &copy; <?= date('Y') ?> Comunidade Desportiva</p>
     </div>
 </footer>
 

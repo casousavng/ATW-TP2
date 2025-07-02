@@ -17,6 +17,32 @@ $query .= " ORDER BY name";
 
 $stmt = $pdo->query($query);
 $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Pesquisa por nome ou email
+$search = trim($_GET['search'] ?? '');
+if ($search !== '') {
+    $query = "SELECT * FROM users";
+    $conditions = [];
+    $params = [];
+
+    if ($filter === 'verificados') {
+        $conditions[] = "is_verified = 1";
+    } elseif ($filter === 'nao_verificados') {
+        $conditions[] = "is_verified = 0";
+    }
+
+    $conditions[] = "(name LIKE :search OR email LIKE :search)";
+    $params[':search'] = '%' . $search . '%';
+
+    if ($conditions) {
+        $query .= " WHERE " . implode(' AND ', $conditions);
+    }
+    $query .= " ORDER BY name";
+
+    $stmt = $pdo->prepare($query);
+    $stmt->execute($params);
+    $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 ?>
 
 <!DOCTYPE html>
@@ -62,6 +88,14 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <option value="verificados" <?= $filter === 'verificados' ? 'selected' : '' ?>>Apenas Verificados</option>
             <option value="nao_verificados" <?= $filter === 'nao_verificados' ? 'selected' : '' ?>>Apenas Não Verificados</option>
         </select>
+    </form>
+
+    <!-- Campo de pesquisa -->
+    <form method="get" class="mb-4 d-flex align-items-center gap-2">
+        <input type="hidden" name="filter" value="<?= htmlspecialchars($filter) ?>">
+        <label for="search" class="form-label mb-0">Pesquisar:</label>
+        <input type="text" name="search" id="search" class="form-control w-auto" placeholder="Nome ou email" value="<?= htmlspecialchars($_GET['search'] ?? '') ?>">
+        <button type="submit" class="btn btn-outline-primary"><i class="bi bi-search"></i></button>
     </form>
 
     <!-- Tabela para dispositivos médios e grandes -->

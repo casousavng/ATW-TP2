@@ -46,9 +46,32 @@ $docs = $pdo->query("SELECT * FROM documentos ORDER BY data_upload DESC")->fetch
 <body class="bg-light">
 <div class="container py-4">
     <main class="container mt-1">
-        <a href="../index.php" class="btn btn-outline-secondary mb-4">
+        <a href="../index.php" class="btn btn-outline-secondary mb-3">
             <i class="bi bi-arrow-left"></i> Voltar
         </a>
+        <br>
+        <!-- Botão para mostrar/esconder formulário -->
+        <button id="toggleFormBtn" class="btn btn-success mb-4">
+            <i class="bi bi-plus-lg me-1"></i> Adicionar Documento
+        </button>
+
+                <!-- Formulário escondido inicialmente -->
+        <div id="formContainer" style="display: none;">
+            <h3 class="mb-3">Adicionar Novo Documento</h3>
+            <form method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="nome_personalizado" class="form-label">Nome do Documento</label>
+                    <input type="text" name="nome_personalizado" id="nome_personalizado" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <input type="file" name="document" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-plus-circle"></i> Adicionar Documento
+                </button>
+            </form>
+            <hr>
+        </div>
 
         <?php if (!empty($uploadSuccess)): ?>
             <div class="alert alert-success">Documento carregado com sucesso!</div>
@@ -77,20 +100,28 @@ $docs = $pdo->query("SELECT * FROM documentos ORDER BY data_upload DESC")->fetch
             <?php endif; ?>
         </ul>
 
-        <h3 class="mb-3">Adicionar Novo Documento</h3>
-        <form method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label for="nome_personalizado" class="form-label">Nome do Documento</label>
-                <input type="text" name="nome_personalizado" id="nome_personalizado" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <input type="file" name="document" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-outline-primary">
-                <i class="bi bi-plus-circle"></i> Adicionar Documento
-            </button>
-        </form>
     </main>
 </div>
+
+<script>
+    const btn = document.getElementById('toggleFormBtn');
+    const form = document.getElementById('formContainer');
+
+    if (btn && form) {
+        btn.addEventListener('click', function () {
+            if (form.style.display === 'none' || form.style.display === '') {
+                form.style.display = 'block';
+                btn.innerHTML = '<i class="bi bi-x-lg me-1"></i> Fechar Formulário';
+                btn.classList.remove('btn-success');
+                btn.classList.add('btn-danger');
+            } else {
+                form.style.display = 'none';
+                btn.innerHTML = '<i class="bi bi-plus-lg me-1"></i> Adicionar Documento';
+                btn.classList.remove('btn-danger');
+                btn.classList.add('btn-success');
+            }
+        });
+    }
+</script>
 </body>
 </html>
