@@ -1,5 +1,7 @@
 <main class="container mt-1">
-    <a href="<?php echo htmlspecialchars($voltar_para); ?>" class="btn btn-outline-secondary mb-4"><i class="bi bi-arrow-left"></i> Voltar</a>
+    <button onclick="window.history.back();" class="btn btn-outline-secondary mb-4">
+    <i class="bi bi-arrow-left"></i> Voltar
+</button>
     <h1 class="mb-3"><?= htmlspecialchars($noticia['titulo']) ?></h1>
     
     <!-- Botão Guardar Notícia -->

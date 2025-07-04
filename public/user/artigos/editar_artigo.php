@@ -154,7 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
         <div class="mb-3">
             <label for="content" class="form-label">Conteúdo</label>
-            <textarea name="content" id="content" class="form-control" rows="6" required><?= htmlspecialchars($content) ?></textarea>
+            <textarea name="content" id="content" class="form-control" rows="10" required style="resize: none;"><?= htmlspecialchars($content) ?></textarea>
         </div>
 
         <button type="submit" name="update" class="btn btn-primary">
@@ -185,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
       <div class="modal-body">
-        Tens a certeza que queres apagar este artigo? Esta ação não pode ser desfeita.
+        Tens a certeza que queres apagar este artigo? <br><strong>Esta ação não pode ser desfeita.</strong>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>

@@ -77,10 +77,7 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Meus Artigos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/styles.css" />
-    <style>
-        textarea { resize: none; }
-    </style>
+    <link rel="stylesheet" href="../../../assets/css/styles.css" />
 </head>
 <body>
 <div class="container mt-4">
@@ -168,7 +165,15 @@ $artigos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+    <br>
+
+    <button id="backToTopBtn" title="Voltar ao topo">
+        <i class="bi bi-arrow-up"></i>
+    </button>
 </div>
+
+
+<script src="../../../assets/script/script.js"></script>
 
 <script>
     const formSection = document.getElementById('form-artigo');

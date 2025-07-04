@@ -1,7 +1,7 @@
 <div class="container mt-1">
-    <a href="<?= htmlspecialchars($voltar_para) ?>" class="btn btn-outline-secondary mb-4">
+    <button onclick="window.history.back();" class="btn btn-outline-secondary mb-4">
         <i class="bi bi-arrow-left"></i> Voltar
-    </a>
+    </button>
 
     <h1><?= htmlspecialchars($article['title']) ?></h1>
 

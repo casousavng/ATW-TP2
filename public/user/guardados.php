@@ -99,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remover_id'])) {
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                     </div>
                     <div class="modal-body">
-                        Tem certeza que deseja apagar este item? Esta ação não poderá ser desfeita.
+                        Tem certeza que deseja apagar este item? <br><strong>Esta ação não poderá ser desfeita.</strong>
                         <input type="hidden" name="remover_id" id="delete-article-id">
                     </div>
                     <div class="modal-footer">
@@ -110,10 +110,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['remover_id'])) {
             </div>
         </div>
     <?php endif; ?>
+
+    <button id="backToTopBtn" title="Voltar ao topo">
+        <i class="bi bi-arrow-up"></i>
+    </button>
+
+
 </div>
 
 <!-- Bootstrap JS Bundle para modal funcionar -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="../../assets/script/script.js"></script>
+
 
 <script>
 // Preenche o ID do conteúdo guardado no modal ao abrir
