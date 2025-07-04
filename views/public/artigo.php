@@ -4,17 +4,10 @@
     </a>
 
     <h1><?= htmlspecialchars($article['title']) ?></h1>
-    <p class="text-muted">Por <?= htmlspecialchars($article['author']) ?> em <?= date('d/m/Y', strtotime($article['created_at'])) ?></p>
 
-    <?php if ($article['image']): ?>
-        <img src="/public<?= htmlspecialchars($article['image']) ?>" alt="Imagem do artigo" class="img-fluid mb-3">
-    <?php endif; ?>
-
-    <div><?= nl2br(strip_tags($article['content'], '<p><br><strong><em><ul><ol><li><b><i>')) ?></div>
-
-    <!-- Botão Guardar Artigo -->
+        <!-- Botão Guardar Artigo -->
     <?php if (isset($_SESSION['user'])): ?>
-        <form method="POST" class="mt-3">
+        <form method="POST" class="mt-4">
             <?php if (isset($guardado_sucesso)): ?>
                 <div class="alert alert-success">Artigo guardado com sucesso!</div>
             <?php elseif (isset($ja_guardado)): ?>
@@ -36,6 +29,15 @@
     <?php else: ?>
         <p class="text-muted mt-3">Inicia sessão para poderes guardar este artigo.</p>
     <?php endif; ?>
+    <br>
+
+    <p class="text-muted">Por <?= htmlspecialchars($article['author']) ?> em <?= date('d/m/Y', strtotime($article['created_at'])) ?></p>
+
+    <?php if ($article['image']): ?>
+        <img src="/public<?= htmlspecialchars($article['image']) ?>" alt="Imagem do artigo" class="img-fluid mb-3">
+    <?php endif; ?>
+
+    <div><?= nl2br(strip_tags($article['content'], '<p><br><strong><em><ul><ol><li><b><i>')) ?></div>
 
     <hr>
 

@@ -86,3 +86,19 @@ footer {
         bottom: 16px;
     }
 }
+
+@media (max-width: 576px) {
+    .btn-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    .btn-group .btn {
+        width: 100%;
+        font-size: 1.1rem;
+        padding: 0.75rem 1.25rem;
+    }
+    .btn-group .bi {
+        font-size: 1.3em;
+    }
+}

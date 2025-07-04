@@ -87,6 +87,19 @@ foreach ($extra_values_raw as $ev) {
                 </div>
             </div>
 
+            <!-- Artigos/Notícias Guardadas -->
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Artigos/Notícias Guardadas</h5>
+                        <p class="card-text">Consulta os artigos e notícias que guardaste para ler mais tarde.</p>
+                        <a href="guardados.php" class="btn btn-warning text-white">
+                            <i class="bi bi-bookmark-fill"></i> Ver Guardados
+                        </a>
+                    </div>
+                </div>
+            </div>
+
             <!-- Histórico -->
             <div class="col-md-4 mb-4">
                 <div class="card h-100 shadow-sm">

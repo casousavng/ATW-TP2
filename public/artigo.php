@@ -128,6 +128,22 @@ if ($isLoggedIn) {
     ]);
     $artigo_ja_guardado = $check->fetchColumn() ? true : false;
 }
+
+$user_id = $_SESSION['user_id'] ?? null;
+$artigo_id = intval($_GET['id'] ?? 0);
+
+if ($user_id && $artigo_id) {
+    $sql = "UPDATE conteudos_guardados 
+            SET vezes_consultado = vezes_consultado + 1 
+            WHERE user_id = :uid 
+              AND tipo_conteudo = 'artigo' 
+              AND conteudo_id = :cid";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        'uid' => $user_id,
+        'cid' => $artigo_id
+    ]);
+}
 ?>
 
 <?php

@@ -167,15 +167,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete'])) {
 
     <hr>
 
-    <form method="POST" onsubmit="return confirm('Tens a certeza que queres apagar este artigo? Esta ação não pode ser desfeita.');">
-        <button type="submit" name="delete" class="btn btn-danger">
+    <form id="deleteForm" method="POST">
+        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
             <i class="bi bi-trash"></i> Apagar Artigo
         </button>
+        <input type="hidden" name="delete" value="1" />
     </form>
     <br>
 </div>
 
+<!-- Modal de confirmação -->
+<div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">Confirmar Exclusão</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        Tens a certeza que queres apagar este artigo? Esta ação não pode ser desfeita.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Apagar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Bootstrap JS Bundle (Popper incluído) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    document.getElementById('deleteForm').submit();
+  });
+</script>
 </body>
 </html>
