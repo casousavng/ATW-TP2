@@ -56,7 +56,7 @@
       .catch(err => console.error('SW falhou', err));
   }
 </script>
-		<div class="container py-2">
+		<div>
 			<!-- Quem Somos -->
 			<section class="mb-4">
 				<h2>Quem Somos</h2>
@@ -131,8 +131,13 @@
 														<?= nl2br(htmlspecialchars($artigo['content'])) ?>
 													</p>
 													<div class="comentarios-count">
-														<?= $artigo['comentarios_count'] ?> comentário
-														<?= ($artigo['comentarios_count'] != 1) ? 's' : '' ?>
+														<?php if ($artigo['comentarios_count'] == 0): ?>
+														Ainda não há comentários
+														<?php elseif ($artigo['comentarios_count'] == 1): ?>
+															<?= $artigo['comentarios_count'] ?> comentário
+														<?php else: ?>
+															<?= $artigo['comentarios_count'] ?> comentários
+														<?php endif; ?>
 													</div>
 												</div>
 											</a>

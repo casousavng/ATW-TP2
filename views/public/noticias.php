@@ -27,7 +27,7 @@
                             <div class="card-body">
                                 <h5 class="card-title"><?= htmlspecialchars($noticia['titulo']) ?></h5>
                                 <p class="card-text"><?= getExcerptWithMore($noticia['texto'], $noticia['id']) ?></p>
-                                <p><small class="text-muted">Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></p>
+                                <span><small class="text-muted">Publicado em: <?= date('d/m/Y H:i', strtotime($noticia['data_criacao'])) ?></small></span>
                             </div>
                         </article>
                     </a>
