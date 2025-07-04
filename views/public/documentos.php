@@ -17,7 +17,7 @@
             <?php foreach ($documentos as $doc): ?>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <span><?= htmlspecialchars($doc['nome_personalizado']) ?></span>
-                    <a href="/uploads/documentos/<?= urlencode($doc['nome_ficheiro']) ?>" download class="btn btn-outline-primary btn-sm">
+                    <a href="../../public/uploads/documentos/<?= urlencode($doc['nome_ficheiro']) ?>" download class="btn btn-outline-primary btn-sm">
                         Descarregar
                     </a>
                 </li>
