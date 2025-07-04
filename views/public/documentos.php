@@ -1,6 +1,14 @@
 <main class="container mt-1">
     <form action="documentos.php" method="get" class="mb-4">
-        <input type="text" name="q" class="form-control" placeholder="Pesquisar documentos..." value="<?= htmlspecialchars($searchQuery) ?>">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Pesquisar documentos..." value="<?= htmlspecialchars($searchQuery) ?>">
+            <button class="btn btn-info" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+            <a href="documentos.php" class="btn btn-secondary" title="Limpar">
+                <i class="bi bi-dash-circle"></i>
+            </a>
+        </div>
     </form>
 
     <h2>Lista de Documentos</h2>
@@ -19,3 +27,9 @@
         <?php endif; ?>
     </ul>
 </main>
+
+<button id="backToTopBtn" title="Voltar ao topo">
+    <i class="bi bi-arrow-up"></i>
+</button>
+
+<script src="../assets/script/script.js"></script>

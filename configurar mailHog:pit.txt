@@ -2,11 +2,13 @@ https://github.com/mailhog/MailHog?tab=readme-ov-file
 
 no MAC: brew update && brew install mailhog
 
-✅ Passos para configurar MailHog com PHPMailer
+alterantiva. Mialpit (brew install mailpit)
 
-🧰 1. Arrancar o MailHog
+✅ Passos para configurar MailHog/Pit com PHPMailer
 
-Se já tens o MailHog instalado com Brew, podes arrancá-lo com:
+🧰 1. Arrancar o MailHog/pit
+
+Se já tens o MailHog/pitinstalado com Brew, podes arrancá-lo com:
 
 brew services start mailhog
 
@@ -27,13 +29,15 @@ function configureMailer(): PHPMailer {
     // Configurações SMTP para MailHog
     $mail->isSMTP();
     $mail->Host       = 'localhost';
-    $mail->SMTPAuth   = false;           // MailHog não precisa de auth
+    $mail->SMTPAuth   = false;           // MailHog/pi não precisa de auth
     $mail->Port       = 1025;
 
     $mail->CharSet = 'UTF-8';
 
     return $mail;
 }
+
+Em caso de usar o mailpit nao coloque nada (deixe em branco os campos user e pass.
 
 
 📬 3. Testar envio

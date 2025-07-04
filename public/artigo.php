@@ -7,6 +7,8 @@ if (!isset($_GET['id']) || !is_numeric($_GET['id'])) {
     die("Artigo inválido.");
 }
 
+$artigo_ja_guardado = false;
+
 $articleId = (int)$_GET['id'];
 
 $stmt = $pdo->prepare("
@@ -84,6 +86,51 @@ $comments = $stmt->fetchAll();
 
 $voltar_para = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'artigos.php';
 
+// Tratamento de artigos guardados
+
+if (!$article) {
+    echo "Artigo não encontrado.";
+    exit;
+}
+
+// Verifica se o utilizador está autenticado
+$isLoggedIn = isset($_SESSION['user_id']);
+$user_id = $isLoggedIn ? $_SESSION['user_id'] : null;
+
+// Guardar o conteúdo se for pedido
+if ($isLoggedIn && isset($_POST['guardar_artigo'])) {
+    if (!$artigo_ja_guardado) {
+        $stmt = $pdo->prepare("
+            INSERT INTO conteudos_guardados (user_id, conteudo_id, tipo_conteudo)
+            VALUES (:user_id, :conteudo_id, 'artigo')
+        ");
+        $stmt->execute([
+            'user_id' => $user_id,
+            'conteudo_id' => $articleId
+        ]);
+        $guardado_sucesso = true;
+        $artigo_ja_guardado = true;
+    } else {
+        $ja_guardado = true;
+    }
+}
+
+$artigo_ja_guardado = false;
+
+if ($isLoggedIn) {
+    $check = $pdo->prepare("
+        SELECT 1 FROM conteudos_guardados 
+        WHERE user_id = :user_id AND conteudo_id = :conteudo_id AND tipo_conteudo = 'artigo'
+    ");
+    $check->execute([
+        'user_id' => $user_id,
+        'conteudo_id' => $articleId
+    ]);
+    $artigo_ja_guardado = $check->fetchColumn() ? true : false;
+}
+?>
+
+<?php
 include '../includes/header.php';
 include '../views/public/artigo.php';
 include '../includes/footer.php';

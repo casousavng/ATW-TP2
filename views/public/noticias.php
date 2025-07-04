@@ -1,6 +1,14 @@
 <main class="container mt-1">
     <form action="noticias.php" method="get" class="mb-4">
-        <input type="text" name="q" class="form-control" placeholder="Pesquisar notícias..." value="<?= htmlspecialchars($searchQuery) ?>">
+        <div class="input-group">
+            <input type="text" name="q" class="form-control" placeholder="Pesquisar notícias..." value="<?= htmlspecialchars($searchQuery) ?>">
+            <button class="btn btn-info" type="submit">
+                <i class="bi bi-search"></i>
+            </button>
+            <a href="noticias.php" class="btn btn-secondary" title="Limpar">
+                <i class="bi bi-dash-circle"></i>
+            </a>
+        </div>
     </form>
 
     <?php if (empty($noticias)): ?>
@@ -28,3 +36,9 @@
         </div>
     <?php endif; ?>
 </main>
+
+<button id="backToTopBtn" title="Voltar ao topo">
+    <i class="bi bi-arrow-up"></i>
+</button>
+
+<script src="../assets/script/script.js"></script>

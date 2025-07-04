@@ -150,6 +150,16 @@ CREATE TABLE comments (
     FOREIGN KEY (article_id) REFERENCES articles(id) ON DELETE CASCADE
 );
 
+CREATE TABLE conteudos_guardados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    conteudo_id INT NOT NULL,
+    tipo_conteudo ENUM('artigo', 'noticia') NOT NULL,
+    data_guardado DATETIME DEFAULT CURRENT_TIMESTAMP,
+    vezes_consultado INT DEFAULT 0,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 ALTER TABLE comments ADD COLUMN denunciado TINYINT(1) NOT NULL DEFAULT 0 AFTER resolvido;
 
 -- Atualização de dados para o admin (ajuste pós-criação)
